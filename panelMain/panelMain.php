@@ -25,6 +25,7 @@ if (!isset($_SESSION['usuario'])) {
     <!-- Navbar lateral -->
     <div class="bg-gray-800 text-white h-screen w-64 flex flex-col justify-between">
         <div class="p-4">
+
             <!-- Aquí van tus elementos del navbar -->
             <h1 class="text-2xl font-bold mb-8">Administracion</h1>
             <ul class="flex flex-col justify-center">
@@ -34,17 +35,17 @@ if (!isset($_SESSION['usuario'])) {
                 </li>
                 <li class="mb-4 flex items-center text-xl">
                     <i class="fas fa-clipboard-list mr-3"></i>
-                    <a href="../pacientePanel/pacientePanel.php" class="hover:text-gray-300">Prestación</a>
+                    <a href="../pacientePanel/pacientePanel.php" class="hover:text-gray-300">Prestaciónes</a>
                 </li>
                 <li class="mb-4 flex items-center text-xl">
                     <i class="fas fa-stethoscope mr-2"></i>
-                    <a href="../tipoPracticaPanel/tipoPracticaPanel.php" class="hover:text-gray-300">Prácticas</a>
+                    <a href="../tipoPracticaPanel/tipoPracticaPanel.php" class="hover:text-gray-300">Cód. Práctica</a>
                 </li>
                 <li class="mb-4 flex items-center text-xl">
                     <i class="fas fa-chart-line mr-2"></i>
-                    <a href="../tablaOME/tablaOME.php" class="hover:text-gray-300"> Estadísticas</a>
+                    <a href="../tablaOME/loginTablaOME.php" class="hover:text-gray-300"> Estadísticas</a>
                 </li>
-                 
+
                 <li class="mb-4 flex items-center text-xl">
                     <i class="fas fa-sign-out-alt mr-2"></i>
                     <a href="../inicioSesion/logout.php" class="hover:text-gray-300">Cerrar sesión</a>
@@ -58,15 +59,29 @@ if (!isset($_SESSION['usuario'])) {
     </div>
 
 
+    <!-- Contenedor principal -->
+<div class="flex flex-col min-h-screen">
+    <!-- Logo arriba a la izquierda -->
+    <img src="../img/logo.png" alt="Logo" class="w-24 h-auto mt-4 ml-4">
+</div>
+
+
+
+
     <!-- Contenido principal -->
     <div class="flex-1 p-8 flex flex-col items-center justify-center">
         <!-- Contenido de la página -->
-        <h1 class="text-3xl font-bold mb-4 text-gray-800"> Worldsoft-Systems</h1>
-        <!-- Imagen a la derecha -->
+        <div class="flex items-center mb-4">
+            <h1 class="text-3xl font-bold text-gray-800">Gestion prestacional</h1>
+        </div>
         <div class="flex-shrink-0 flex justify-center items-center">
-            <img src="../img/main.png" alt="Imagen" class="w-full h-auto max-w-lg">
+            <img src="../img/main.jpeg" alt="Imagen"
+                class="border border-gray-400 rounded-lg w-full h-auto max-w-2xl mb-8">
         </div>
     </div>
+
+
+
 
 
 

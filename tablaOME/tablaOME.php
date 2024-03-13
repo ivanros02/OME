@@ -1,6 +1,12 @@
 <?php
 require_once '../controlador/control_paciente.php';
 
+// Verificar si el usuario está autenticado
+if (!isset($_SESSION['usuario'])) {
+    header("Location: ../index.php");
+    exit; // Asegura que el script se detenga después de redirigir
+}
+
 // Inicializar variables de filtro
 $fecha_desde = isset($_GET['fecha_desde']) ? $_GET['fecha_desde'] : '';
 $fecha_hasta = isset($_GET['fecha_hasta']) ? $_GET['fecha_hasta'] : '';
@@ -27,6 +33,20 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <title>Tabla de Pacientes</title>
     <!-- Enlace al archivo de Tailwind CSS -->
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <style>
+        .image-top-right {
+            position: absolute;
+            top: 10px;
+            /* Ajustar según la distancia desde la parte superior */
+            right: 10px;
+            /* Ajustar según la distancia desde el lado derecho */
+            width: 5rem;
+            /* Ancho deseado de la imagen */
+            height: auto;
+            /* Altura ajustada automáticamente según el ancho */
+            border-radius: 2px;
+        }
+    </style>
 </head>
 
 <body class="bg-gray-100">
@@ -35,8 +55,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
    
  <!-- Lista de pacientes existentes -->
  <hr class="border-t border-gray-400 my-8">
-    <div class="container mx-auto px-4">
+ <div class="container mx-auto px-4 py-8 relative"> <!-- Añadir relative para el posicionamiento absoluto -->
+        <img src="../img/exportar_excel.bmp" alt="Imagen" class="image-top-right hidden sm:block">
         <h2 class="text-3xl font-semibold mb-4">Pacientes Existentes</h2>
+
+        <div class="mb-4">
+        <a href="generar_reporte_excel.php?fecha_desde=<?php echo $fecha_desde; ?>&fecha_hasta=<?php echo $fecha_hasta; ?>&profesional=<?php echo $profesional; ?>" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">Exportar a Excel</a>
+        </div>
 
         <!-- Formulario de filtro -->
         <form method="GET" class="mb-8">

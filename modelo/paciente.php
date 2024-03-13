@@ -1,7 +1,7 @@
 <?php
 require_once '../conexion/conexion.php';
 
-function agregarPaciente($nombreYapellido, $benef, $cod_prof, $cod_practica, $fecha) {
+function agregarPaciente($nombreYapellido, $benef, $cod_prof, $cod_practica,$cod_diag, $fecha) {
     global $conn;
     
     // Verificar si el beneficio existe en la tabla padron
@@ -12,7 +12,7 @@ function agregarPaciente($nombreYapellido, $benef, $cod_prof, $cod_practica, $fe
     
     // Si el beneficio existe, realizar la inserción del paciente
     if ($beneficio_existente) {
-        $sql_insert_paciente = "INSERT INTO paciente (nombreYapellido, benef, cod_prof, cod_practica, fecha) VALUES ('$nombreYapellido', '$benef', '$cod_prof', '$cod_practica', '$fecha')";
+        $sql_insert_paciente = "INSERT INTO paciente (nombreYapellido, benef, cod_prof, cod_practica, fecha ,cod_diag) VALUES ('$nombreYapellido', '$benef', '$cod_prof', '$cod_practica', '$fecha' , '$cod_diag')";
         return $conn->query($sql_insert_paciente);
     } else {
         // Si el beneficio no existe, insertar los datos en la tabla padron y luego en la tabla paciente
@@ -21,7 +21,7 @@ function agregarPaciente($nombreYapellido, $benef, $cod_prof, $cod_practica, $fe
         
         if ($result_insert_padron) {
             // Después de insertar en padron, insertar en la tabla paciente
-            $sql_insert_paciente = "INSERT INTO paciente (nombreYapellido, benef, cod_prof, cod_practica, fecha) VALUES ('$nombreYapellido', '$benef', '$cod_prof', '$cod_practica', '$fecha')";
+            $sql_insert_paciente = "INSERT INTO paciente (nombreYapellido, benef, cod_prof, cod_practica, fecha ,cod_diag) VALUES ('$nombreYapellido', '$benef', '$cod_prof', '$cod_practica', '$fecha' , '$cod_diag')";
             return $conn->query($sql_insert_paciente);
         } else {
             return false; // Si hay un error al insertar en padron, retornar false

@@ -6,16 +6,16 @@ if (session_status() == PHP_SESSION_NONE) {
     session_start();
 }
 
-// Procesar el formulario para agregar un nuevo paciente
 if (isset($_POST['agregar'])) {
     $nombreYapellido = $_POST['nombreYapellido'];
     $benef = $_POST['benef'];
     $cod_prof = $_POST['cod_prof'];
     $cod_practica = $_POST['cod_practica'];
-    $fecha = $_POST['fecha']; // Asegúrate de obtener la fecha del formulario
+    $fecha = $_POST['fecha'];
+    $cod_diag = $_POST['cod_diag']; // Obtener el código de diagnóstico del formulario
 
-    // Llama a la función agregarPaciente con los cinco argumentos requeridos
-    if (agregarPaciente($nombreYapellido, $benef, $cod_prof, $cod_practica, $fecha)) {
+    // Llama a la función agregarPaciente con los argumentos necesarios, incluido $cod_diag
+    if (agregarPaciente($nombreYapellido, $benef, $cod_prof, $cod_practica, $cod_diag, $fecha)) {
         $_SESSION['alert_message'] = "Paciente agregado correctamente";
     } else {
         $_SESSION['alert_message'] = "Error al agregar el paciente";
@@ -390,7 +390,33 @@ function obtenerCodigosPractica()
     }
 }
 
+function obtenerDiagnostico()
+{
+    global $conn;
 
+    // Preparar la consulta SQL
+    $sql = "SELECT cod_diag FROM diagnostico";
+
+    // Ejecutar la consulta
+    $result = $conn->query($sql);
+
+    // Verificar si se encontraron códigos de práctica
+    if ($result->num_rows > 0) {
+        // Inicializar un array para almacenar los códigos de práctica
+        $codigos_practica = array();
+
+        // Iterar sobre los resultados y almacenar los códigos de práctica en el array
+        while ($row = $result->fetch_assoc()) {
+            $codigos_practica[] = $row['cod_diag'];
+        }
+
+        // Devolver el array de códigos de práctica
+        return $codigos_practica;
+    } else {
+        // Devolver un array vacío si no se encontraron códigos de práctica
+        return array();
+    }
+}
 
 
 ?>

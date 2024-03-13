@@ -7,13 +7,24 @@
     <title>Profsionales</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <!-- Agregar el archivo CSS de Tailwind CSS -->
+    <style>
+        .image-top-right {
+            position: absolute;
+            top: 10px; /* Ajustar según la distancia desde la parte superior */
+            right: 10px; /* Ajustar según la distancia desde el lado derecho */
+            width: 9rem; /* Ancho deseado de la imagen */
+            height: auto; /* Altura ajustada automáticamente según el ancho */
+            
+        }
+    </style>
 </head>
 
 <body class="bg-gray-100">
      <!-- Botón para volver al panel -->
      <a href="../panelMain/panelMain.php" class="bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded">Volver</a>
 
-    <div class="container mx-auto px-4 py-8">
+     <div class="container mx-auto px-4 py-8 relative"> <!-- Añadir relative para el posicionamiento absoluto -->
+        <img src="../img/profesional.jpeg" alt="Imagen" class="image-top-right hidden sm:block">
 
         <h1 class="text-3xl font-bold mb-4">Profsionales</h1>
 

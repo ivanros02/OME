@@ -13,15 +13,30 @@ require_once '../controlador/control_paciente.php';
     <title>Panel de Prestaciones</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <!-- Agregar el archivo CSS de Tailwind CSS -->
-
+    <style>
+        .image-top-right {
+            position: absolute;
+            top: 10px;
+            /* Ajustar según la distancia desde la parte superior */
+            right: 10px;
+            /* Ajustar según la distancia desde el lado derecho */
+            max-width: 100%;
+            /* Ancho máximo de la imagen */
+            height: auto;
+            /* Altura ajustada automáticamente según el ancho */
+            border-radius: 12px;
+            /* Radio de borde para hacerlo más redondeado */
+        }
+    </style>
 </head>
 
 <body class="bg-gray-100">
     <!-- Botón para volver al panel -->
-    <a href="../panelMain/panelMain.php" class="bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded">Volver</a>
+    <a href="../panelMain/panelMain.php"
+        class="bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded">Volver</a>
 
     <?php
-    
+
     if (isset($_SESSION['alert_message'])) {
         // Muestra el mensaje de alerta
         echo "<script>alert('" . $_SESSION['alert_message'] . "');</script>";
@@ -32,8 +47,8 @@ require_once '../controlador/control_paciente.php';
     <div id="modalContainer" class="modal-container">
         <div class="modal-content" id="qrModalContent"></div>
     </div>
-    <div class="container mx-auto px-4 py-8">
-
+    <div class="container mx-auto px-4 py-8 relative"> <!-- Añadir relative para el posicionamiento absoluto -->
+        <img src="../img/prestaciones.jpeg" alt="Imagen" class="image-top-right hidden sm:block">
         <h1 class="text-3xl font-bold mb-4">Panel de Prestaciones</h1>
 
         <!-- Formulario para agregar nuevo paciente -->
@@ -85,6 +100,22 @@ require_once '../controlador/control_paciente.php';
                     ?>
                 </select>
             </div>
+
+            <div class="mb-4">
+
+                <label for="cod_diag" class="block text-sm font-medium text-gray-700">Diagnóstico:</label>
+                <select id="cod_diag" name="cod_diag" required
+                    class="mt-1 p-2 block w-full border border-gray-300 rounded-md focus:outline-none focus:border-blue-500">
+                    <option value="">Seleccionar Diagnóstico</option>
+                    <?php
+                    $cod_diag_list = obtenerDiagnostico(); // Obtener la lista de diagnósticos
+                    foreach ($cod_diag_list as $cod_diag_item) {
+                        echo "<option value='" . $cod_diag_item . "'>" . $cod_diag_item . "</option>";
+                    }
+                    ?>
+                </select>
+            </div>
+
 
             <div class="mb-4">
                 <label for="fecha" class="block text-sm font-medium text-gray-700">Fecha:</label>
