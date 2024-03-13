@@ -30,45 +30,53 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 </head>
 
 <body class="bg-gray-100">
+ <!-- Botón para volver al panel -->
+ <a href="../panelMain/panelMain.php" class="bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded">Volver</a>
+   
+ <!-- Lista de pacientes existentes -->
+ <hr class="border-t border-gray-400 my-8">
+    <div class="container mx-auto px-4">
+        <h2 class="text-3xl font-semibold mb-4">Pacientes Existentes</h2>
 
-    <!-- Lista de pacientes existentes -->
-    <hr class="border-t border-gray-400 my-8">
-    <h2 class="text-2xl font-bold mb-2">Pacientes Existentes</h2>
-
-    <!-- Formulario de filtro -->
-    <form method="GET">
-        <div class="flex space-x-4 mb-4">
-            <div>
-                <label for="fecha_desde" class="block font-semibold">Desde:</label>
-                <input type="date" id="fecha_desde" name="fecha_desde" class="border px-2 py-1">
-            </div>
-            <div>
-                <label for="fecha_hasta" class="block font-semibold">Hasta:</label>
-                <input type="date" id="fecha_hasta" name="fecha_hasta" class="border px-2 py-1">
-            </div>
-            <div>
-                <label for="profesional" class="block font-semibold">Profesional:</label>
-                <select name="profesional" id="profesional" class="border px-2 py-1">
-                    <option value="">Todos</option>
-                    <?php foreach ($profesionales as $profesional_item): ?>
-                        <option value="<?php echo $profesional_item['cod_prof']; ?>" <?php echo ($profesional == $profesional_item['cod_prof']) ? 'selected' : ''; ?>>
+        <!-- Formulario de filtro -->
+        <form method="GET" class="mb-8">
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+                <div>
+                    <label for="fecha_desde" class="block font-semibold">Desde:</label>
+                    <input type="date" id="fecha_desde" name="fecha_desde"
+                        class="border border-gray-300 rounded px-3 py-2 w-full">
+                </div>
+                <div>
+                    <label for="fecha_hasta" class="block font-semibold">Hasta:</label>
+                    <input type="date" id="fecha_hasta" name="fecha_hasta"
+                        class="border border-gray-300 rounded px-3 py-2 w-full">
+                </div>
+                <div>
+                    <label for="profesional" class="block font-semibold">Profesional:</label>
+                    <select name="profesional" id="profesional"
+                        class="border border-gray-300 rounded px-3 py-2 w-full">
+                        <option value="">Todos</option>
+                        <?php foreach ($profesionales as $profesional_item): ?>
+                        <option value="<?php echo $profesional_item['cod_prof']; ?>"
+                            <?php echo ($profesional == $profesional_item['cod_prof']) ? 'selected' : ''; ?>>
                             <?php echo obtenerNombreProfesional($profesional_item['cod_prof']); ?>
                         </option>
-                    <?php endforeach; ?>
-                </select>
+                        <?php endforeach; ?>
+                    </select>
+                </div>
+                <div class="flex items-end">
+                    <button type="submit"
+                        class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Filtrar</button>
+                </div>
             </div>
-            <div>
-                <button type="submit"
-                    class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Filtrar</button>
-            </div>
-        </div>
-    </form>
-    <?php if (!empty($profesional)): ?>
-        <p>Total de pacientes para
+        </form>
+
+        <?php if (!empty($profesional)): ?>
+        <p class="mb-4">Total de pacientes para
             <?php echo obtenerNombreProfesional($profesional); ?>:
             <?php echo obtenerTotalPacientesParaProfesional($profesional); ?>
         </p>
-    <?php endif; ?>
+        <?php endif; ?>
     <div class="overflow-x-auto">
         <table class="table-auto w-full">
             <thead>

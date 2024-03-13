@@ -10,13 +10,16 @@ require_once '../controlador/control_paciente.php';
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Panel de Pacientes</title>
+    <title>Panel de Prestaciones</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <!-- Agregar el archivo CSS de Tailwind CSS -->
 
 </head>
 
 <body class="bg-gray-100">
+    <!-- Botón para volver al panel -->
+    <a href="../panelMain/panelMain.php" class="bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded">Volver</a>
+
     <?php
     
     if (isset($_SESSION['alert_message'])) {
@@ -31,7 +34,7 @@ require_once '../controlador/control_paciente.php';
     </div>
     <div class="container mx-auto px-4 py-8">
 
-        <h1 class="text-3xl font-bold mb-4">Panel de Pacientes</h1>
+        <h1 class="text-3xl font-bold mb-4">Panel de Prestaciones</h1>
 
         <!-- Formulario para agregar nuevo paciente -->
         <h2 class="text-2xl font-bold mb-2">Agregar Nuevo Paciente</h2>

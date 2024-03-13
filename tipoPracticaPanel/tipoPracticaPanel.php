@@ -63,6 +63,8 @@ if (isset($_GET['eliminar'])) {
 </head>
 
 <body class="bg-gray-100">
+    <!-- Botón para volver al panel -->
+    <a href="../panelMain/panelMain.php" class="bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded">Volver</a>
 
     <div class="container mx-auto px-4 py-8">
 

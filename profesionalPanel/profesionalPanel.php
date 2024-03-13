@@ -7,13 +7,11 @@
     <title>Profsionales</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <!-- Agregar el archivo CSS de Tailwind CSS -->
-
-    <style>
-        /* Personalizar estilos adicionales aquí si es necesario */
-    </style>
 </head>
 
 <body class="bg-gray-100">
+     <!-- Botón para volver al panel -->
+     <a href="../panelMain/panelMain.php" class="bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded">Volver</a>
 
     <div class="container mx-auto px-4 py-8">
 
