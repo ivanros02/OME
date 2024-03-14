@@ -131,6 +131,24 @@ function obtenerTotalPacientesParaProfesional($profesional)
     }
 }
 
+function obtenerTotalPacientes()
+{
+    global $conn;
+
+    // Preparar la consulta SQL para obtener el total de pacientes
+    $sql = "SELECT COUNT(*) AS total FROM paciente";
+
+    // Ejecutar la consulta
+    $result = $conn->query($sql);
+
+    // Obtener el resultado
+    $row = $result->fetch_assoc();
+
+    // Devolver el total de pacientes
+    return $row['total'];
+}
+
+
 
 // Función para obtener los detalles de un paciente por su ID
 function obtenerPacientePorID($cod_paci)
@@ -330,6 +348,29 @@ function obtenerEspecialidadProfesional($cod_prof)
         return $row['especialidad'];
     } else {
         return "Especialidad no especificada"; // O un mensaje apropiado si no se encuentra la especialidad
+    }
+}
+
+function obtenerDescripcionPractica($cod_practica )
+{
+    global $conn;
+    $sql = "SELECT descript FROM tipo_prac WHERE cod_practica  = ?";
+
+    // Preparar la sentencia
+    $stmt = $conn->prepare($sql);
+    // Vincular parámetro
+    $stmt->bind_param("i", $cod_practica );
+    // Ejecutar consulta
+    $stmt->execute();
+    // Obtener resultado
+    $result = $stmt->get_result();
+
+    // Verificar si se encontró la especialidad
+    if ($result->num_rows > 0) {
+        $row = $result->fetch_assoc();
+        return $row['descript'];
+    } else {
+        return "Sin descripcion"; // O un mensaje apropiado si no se encuentra la especialidad
     }
 }
 

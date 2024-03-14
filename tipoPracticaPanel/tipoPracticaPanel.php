@@ -58,7 +58,18 @@ if (isset($_GET['eliminar'])) {
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <!-- Agregar el archivo CSS de Tailwind CSS -->
     <style>
-        /* Personalizar estilos adicionales aquí si es necesario */
+        .image-top-right {
+            position: absolute;
+            top: 10px;
+            /* Ajustar según la distancia desde la parte superior */
+            right: 10px;
+            /* Ajustar según la distancia desde el lado derecho */
+            width: 9rem;
+            /* Ancho deseado de la imagen */
+            height: auto;
+            /* Altura ajustada automáticamente según el ancho */
+            border-radius: 2px;
+        }
     </style>
 </head>
 
@@ -66,7 +77,8 @@ if (isset($_GET['eliminar'])) {
     <!-- Botón para volver al panel -->
     <a href="../panelMain/panelMain.php" class="bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded">Volver</a>
 
-    <div class="container mx-auto px-4 py-8">
+    <div class="container mx-auto px-4 py-8 relative"> <!-- Añadir relative para el posicionamiento absoluto -->
+        <img src="../img/digital.practias.jpg" alt="Imagen" class="image-top-right hidden sm:block">
 
         <h1 class="text-3xl font-bold mb-4">Tipos de Práctica</h1>
 
@@ -98,7 +110,6 @@ if (isset($_GET['eliminar'])) {
             <table class="table-auto w-full">
                 <thead>
                     <tr>
-                        <th class="px-4 py-2">ID</th>
                         <th class="px-4 py-2">Descripción</th>
                         <th class="px-4 py-2">Código de Práctica</th>
                         <th class="px-4 py-2">Acciones</th>
@@ -111,7 +122,6 @@ if (isset($_GET['eliminar'])) {
                     $tiposPractica = obtenerTiposPractica();
                     foreach ($tiposPractica as $tipo) {
                         echo "<tr>";
-                        echo "<td class='border px-4 py-2'>" . $tipo["id"] . "</td>";
                         echo "<td class='border px-4 py-2'>" . $tipo["descript"] . "</td>";
                         echo "<td class='border px-4 py-2'>" . $tipo["cod_practica"] . "</td>";
                         echo "<td class='border px-4 py-2'>

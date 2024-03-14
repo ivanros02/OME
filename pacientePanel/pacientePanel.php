@@ -52,7 +52,7 @@ require_once '../controlador/control_paciente.php';
         <h1 class="text-3xl font-bold mb-4">Panel de Prestaciones</h1>
 
         <!-- Formulario para agregar nuevo paciente -->
-        <h2 class="text-2xl font-bold mb-2">Agregar Nuevo Paciente</h2>
+        <h2 class="text-2xl font-bold mb-2">Agregar Nueva Prestacion</h2>
         <form method="post" class="mb-4" id="formAgregar">
 
             <div class="mb-4">

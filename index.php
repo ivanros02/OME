@@ -16,7 +16,8 @@
 
 <body class="bg-gray-100 h-screen flex flex-col items-center justify-center">
 
-    <img src="./img/logo.png" alt="Logo" class="h-24 w-auto mb-8">
+    <img src="./img/logo.png" alt="Logo" class="h-24 w-auto mb-8 border-none">
+
 
     <div class="bg-white p-8 rounded shadow-md w-96">
 

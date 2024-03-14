@@ -22,6 +22,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     actualizarEstadoCargado($cod_paci, $nuevo_estado);
 }
 
+// Obtener el total de todos los pacientes
+$totalPacientes = obtenerTotalPacientes();
+
 ?>
 
 <!DOCTYPE html>
@@ -95,7 +98,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 </div>
             </div>
         </form>
-
+        <p class="mb-4">Total de pacientes: <?php echo $totalPacientes; ?></p>
+                    
         <?php if (!empty($profesional)): ?>
         <p class="mb-4">Total de pacientes para
             <?php echo obtenerNombreProfesional($profesional); ?>:
@@ -125,8 +129,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     echo "<td class='border px-4 py-2'>" . $paciente["benef"] . "</td>";
                     echo "<td class='border px-4 py-2'>" . obtenerNombreProfesional($paciente["cod_prof"]) . "</td>";
                     echo "<td class='border px-4 py-2'>" . obtenerEspecialidadProfesional($paciente["cod_prof"]) . "</td>";
-                    echo "<td class='border px-4 py-2'>" . $paciente["cod_practica"] . "</td>";
-                    echo "<td class='border px-4 py-2'>" . $paciente["fecha"] . "</td>";
+                    echo "<td class='border px-4 py-2'>" . obtenerDescripcionPractica($paciente["cod_practica"]) . "</td>";
+                    echo "<td class='border px-4 py-2'>" . date('d/m/Y', strtotime($paciente["fecha"])) . "</td>";
                     echo "<td class='border px-4 py-2'>";
                     // Formulario para cambiar el estado 'cargado'
                     echo "<form method='post'>";
