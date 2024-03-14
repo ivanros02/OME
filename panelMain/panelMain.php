@@ -29,22 +29,25 @@ if (!isset($_SESSION['usuario'])) {
             <!-- Aquí van tus elementos del navbar -->
             <h1 class="text-2xl font-bold mb-8">Administracion</h1>
             <ul class="flex flex-col justify-center">
-                <li class="mb-4 flex items-center text-xl">
-                    <i class="fas fa-user-md mr-2"></i>
-                    <a href="../profesionalPanel/profesionalPanel.php" class="hover:text-gray-300">Profesionales</a>
-                </li>
+
                 <li class="mb-4 flex items-center text-xl">
                     <i class="fas fa-clipboard-list mr-3"></i>
                     <a href="../pacientePanel/pacientePanel.php" class="hover:text-gray-300">Prestaciónes</a>
                 </li>
                 <li class="mb-4 flex items-center text-xl">
-                    <i class="fas fa-stethoscope mr-2"></i>
-                    <a href="../tipoPracticaPanel/tipoPracticaPanel.php" class="hover:text-gray-300">Cód. Práctica</a>
-                </li>
-                <li class="mb-4 flex items-center text-xl">
                     <i class="fas fa-chart-line mr-2"></i>
                     <a href="../tablaOME/loginTablaOME.php" class="hover:text-gray-300"> Estadísticas</a>
                 </li>
+                <li class="mb-4 flex items-center text-xl">
+                    <i class="fas fa-user-md mr-2"></i>
+                    <a href="../profesionalPanel/profesionalPanel.php" class="hover:text-gray-300">Profesionales</a>
+                </li>
+
+                <li class="mb-4 flex items-center text-xl">
+                    <i class="fas fa-stethoscope mr-2"></i>
+                    <a href="../tipoPracticaPanel/tipoPracticaPanel.php" class="hover:text-gray-300">Cód. Práctica</a>
+                </li>
+
 
                 <li class="mb-4 flex items-center text-xl">
                     <i class="fas fa-sign-out-alt mr-2"></i>
@@ -60,10 +63,10 @@ if (!isset($_SESSION['usuario'])) {
 
 
     <!-- Contenedor principal -->
-<div class="flex flex-col min-h-screen">
-    <!-- Logo arriba a la izquierda -->
-    <img src="../img/logo.png" alt="Logo" class="w-24 h-auto mt-4 ml-4">
-</div>
+    <div class="flex flex-col min-h-screen">
+        <!-- Logo arriba a la izquierda -->
+        <img src="../img/logo.png" alt="Logo" class="w-24 h-auto mt-4 ml-4">
+    </div>
 
 
 

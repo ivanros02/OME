@@ -33,7 +33,7 @@ $totalPacientes = obtenerTotalPacientes();
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tabla de Pacientes</title>
+    <title>Prestaciones</title>
     <!-- Enlace al archivo de Tailwind CSS -->
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <style>
@@ -60,7 +60,7 @@ $totalPacientes = obtenerTotalPacientes();
  <hr class="border-t border-gray-400 my-8">
  <div class="container mx-auto px-4 py-8 relative"> <!-- Añadir relative para el posicionamiento absoluto -->
         <img src="../img/exportar_excel.bmp" alt="Imagen" class="image-top-right hidden sm:block">
-        <h2 class="text-3xl font-semibold mb-4">Pacientes Existentes</h2>
+        <h2 class="text-3xl font-semibold mb-4">Control de prestaciones cargadas</h2>
 
         <div class="mb-4">
         <a href="generar_reporte_excel.php?fecha_desde=<?php echo $fecha_desde; ?>&fecha_hasta=<?php echo $fecha_hasta; ?>&profesional=<?php echo $profesional; ?>" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">Exportar a Excel</a>
