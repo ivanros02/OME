@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 15-03-2024 a las 00:41:53
+-- Tiempo de generación: 15-03-2024 a las 00:42:57
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.2.12
 
@@ -20,6 +20,44 @@ SET time_zone = "+00:00";
 --
 -- Base de datos: `ome`
 --
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `credenciales`
+--
+
+CREATE TABLE `credenciales` (
+  `id` int(11) NOT NULL,
+  `usuario` varchar(255) NOT NULL,
+  `clave` varchar(255) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `credenciales`
+--
+
+INSERT INTO `credenciales` (`id`, `usuario`, `clave`) VALUES
+(1, 'admin', '123');
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `credenciales_estadisticas`
+--
+
+CREATE TABLE `credenciales_estadisticas` (
+  `id` int(11) NOT NULL,
+  `usuario` varchar(255) NOT NULL,
+  `clave` varchar(255) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `credenciales_estadisticas`
+--
+
+INSERT INTO `credenciales_estadisticas` (`id`, `usuario`, `clave`) VALUES
+(1, 'adminEstadisticas', '123');
 
 -- --------------------------------------------------------
 
@@ -505,9 +543,216 @@ INSERT INTO `diagnostico` (`cod_diag`, `descript`) VALUES
 ('F98.9', 'TRASTORNOS NO ESPECIFICADOS EMOCIONALES Y DEL COMPORTAMIENTO QUE APARECEN'),
 ('F99', 'TRASTORNO MENTAL NO ESPECIFICADO');
 
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `paciente`
+--
+
+CREATE TABLE `paciente` (
+  `cod_paci` int(11) NOT NULL,
+  `nombreYapellido` varchar(255) NOT NULL,
+  `benef` bigint(255) NOT NULL,
+  `cod_prof` int(255) NOT NULL,
+  `cod_practica` int(255) NOT NULL,
+  `fecha` date NOT NULL,
+  `cod_diag` varchar(255) NOT NULL,
+  `cargado` varchar(255) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `padron`
+--
+
+CREATE TABLE `padron` (
+  `benef` bigint(255) NOT NULL,
+  `nombreYapellido` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_spanish_ci;
+
+--
+-- Volcado de datos para la tabla `padron`
+--
+
+INSERT INTO `padron` (`benef`, `nombreYapellido`) VALUES
+(15068250750700, 'PEREZ RAMIREZ ESTELA ROSA'),
+(14006461680200, 'CARTES BEATRIZ SUSANA'),
+(15064310380500, 'PILQUIMAN EVA'),
+(14006461680201, 'RAMOS ANGEL EDUARDO'),
+(15023002480100, 'PIERGENTILI INES MARIA'),
+(15064074820400, 'DIAZ CLAUDINA'),
+(15047840050101, 'HUENCHUAL LAURA BEATRIZ'),
+(11093974860100, 'PARRILLI JOSE'),
+(11596516980100, 'LARRINAGA MARTA'),
+(14006461680200, 'CARTES BEATRIZ SUSANA'),
+(15068381160300, 'RODRIGUEZ SUSANA'),
+(15042949720400, 'ARANEA MIRTA NOEMI'),
+(15011124490800, 'CATALAN ROJAS MARGARITA TERESA'),
+(15590597980800, 'RIVAS RIVERA JUANA'),
+(15066817070800, 'REYES GLADYS DEL CARMEN'),
+(15059199830400, 'TERAN AIDEE DEL ROSARIO'),
+(15038729250700, 'MEDEL MAFALDA SEBASTIANA'),
+(15043412810000, 'ZARATE NELSA INES'),
+(15038380010700, 'NAVARRO NAVARRO VICTOR LUCAS'),
+(15535959290200, 'FRITZ MARTA MARIA'),
+(14016963000300, 'LINARES SUSANA'),
+(15044628640100, 'RODRIGUEZ NILDA MIRTA'),
+(15087353800900, 'ECHECHURI SUSANA HAYDEE'),
+(15034307940800, 'CORREA RAQUEL'),
+(6531092460700, 'MORALES ARANGUIZ ALICIA'),
+(15057501710316, 'ALTAMIRANO DANIEL ALBERTO'),
+(15026170440500, 'ESPLEJ SOBARZO MARIA HAYDEE'),
+(14091384960900, 'CURIHUINCA TOMAS DOMINGO'),
+(15046977960100, 'AGUILERA LAGOS RAMONA DE DIOS'),
+(15051089220200, 'NUCIFORO CARLOS AURELIO'),
+(15599698130000, 'AGUIRRE MARIA URSULA'),
+(46502525190700, 'VERA JUAN DOMINGO'),
+(15045534360400, 'KOVICH ROBERTO BASILIO'),
+(15589094190100, 'BONTEMPO YOLANDA'),
+(15068192840400, 'VERA JULIO HECTOR'),
+(15075642970500, 'ALMEIDA JORGE ALBERTO'),
+(15063945640500, 'MARTINEZ GRACIELA ELENA'),
+(13060559440616, 'HERNANDEZ MARIA BEATRIZ'),
+(15051637430600, 'ROJAS PEREIRA AMADA DEL CARMEN'),
+(14008720080100, 'QUEZADA FLORENTINA'),
+(15075169540900, 'SOLE GABRIELA VIRGINIA'),
+(11033919590040, 'NOBILE MARIANA ANTONELLA'),
+(46590653320200, 'OJEDA SEGUEL JUANA CELINDA'),
+(14007902660400, 'FIGUEROA PEREZ MELCHORA IRMA'),
+(15562227960800, 'BORRINI MARTA ISABEL'),
+(15071527690300, 'PIZZONI ROSA INES'),
+(14593707520504, 'GUTIERREZ ROCIO ALDANA'),
+(15049994310400, 'FUENTEALBA CIFUENTES CECILIA OLGA'),
+(15098501150601, 'MORINIGO RAMONA ISABEL'),
+(15577385000800, 'GUTIERREZ MARIO NESTOR'),
+(15059535700100, 'HICK BERNADETTE MARIE JOSEPHINE GHISLAIN'),
+(15053361790500, 'RETONDO FERNANDO ISIDORO'),
+(14006884850800, 'GALIZIA CECILIA SUSANA'),
+(15092200390100, 'VALLEJOS ZU?IGA VICTOR SEGUNDO'),
+(15022346430400, 'MU?OZ MARIA INES'),
+(15044745920816, 'CASTA?ON ALBERTO ANDRES'),
+(15008812740102, 'ACHARI RAMOS AMADEO LEON'),
+(14006799830500, 'VIDART MARIA TERESA'),
+(15098501150600, 'VERDUN PEDRO HORACIO'),
+(15010358450000, 'MORAN SONIA VERONICA'),
+(14013397830100, 'MONTES GONZALEZ IRIS DAMARIS'),
+(14006713910100, 'SALAZAR JUANA FLOR'),
+(14000947050102, 'VASQUEZ PRIETO ROMINA BELEN'),
+(11094016770003, 'GOMEZ MAR?A PAZ'),
+(15044628640100, 'RODRIGUEZ NILDA MIRTA'),
+(14001383680400, 'HARINA LAURA LILIAN'),
+(14011295600500, 'ANABAL?N NOEM? LILIANA'),
+(15033596310300, 'CAMELLI CLARISA DEL CARMEN'),
+(46502475600000, 'CIFUENTES MATUS DOMINGO ALFREDO'),
+(46591163940500, 'SUAREZ DOMINGO FRANCISCO'),
+(15051323190200, 'GUERRERO ALICIA NELIDA'),
+(15055660010000, 'MONTENEGRO EVA RAQUEL'),
+(15052445410701, 'RIOSECO CARLINA DEL CARMEN'),
+(46501535810500, 'GIOVANNONI CLAUDIO MIGUEL'),
+(15048626440200, 'IGLESIA NOEMI SUSANA'),
+(15053613810300, 'AVALIS LUCIANO ANTONIO'),
+(15034776910400, 'RUIZ DIAZ FEDERICO'),
+(15594089830100, 'KRASNIANSKY MARINA'),
+(15069230220000, 'TORO IBARRA MARIA MARGARITA'),
+(15067569290100, 'ORTIZ MIRELLA DEL ROSA'),
+(15006754550901, 'PEREIRA COFIAN MAGALY'),
+(14090589940116, 'JARA QUEZADA JOSE LUIS'),
+(14000629650100, 'REYES BLANCA LIDIA'),
+(14012290510900, 'ARBONA MARIA ROSA'),
+(14005382730300, 'IVANOFF NOEMI SOFIA'),
+(15065122210000, 'GARCIA IRMA NOEMI'),
+(15054475810800, 'AGUILERA STORM WASHINGTON AUGUSTO'),
+(15096855180900, 'MALDONADO ADRIANA DEL VALLA'),
+(11034270420000, 'MORENO LABRIN ELSA'),
+(11596580890600, 'SAWINO ELENA'),
+(15594053030200, 'URIBE ESTELA EDITH'),
+(15044709830500, 'MARTINS GRACIELA LUCIA'),
+(15039449340700, 'GARCIA JARA RUTH ALICIA'),
+(15078864650001, 'CARDENAS PERAN LUIS IVAN'),
+(15078864650001, 'CARDENAS PERAN LUIS IVAN'),
+(15078864650001, 'CARDENAS PERAN LUIS IVAN'),
+(15078864650001, 'CARDENAS PERAN LUIS IVAN'),
+(15078864650001, 'CARDENAS PERAN LUIS IVAN'),
+(15006680310200, 'CABRERA JORGE ALBERTO'),
+(15078864650001, 'CARDENAS PERAN LUIS IVAN'),
+(15007912330501, 'HENRIQUEZ RIQUELME DORIS MADELAINE'),
+(15078864650001, 'CARDENAS PERAN LUIS IVAN'),
+(15078864650001, 'CARDENAS PERAN LUIS IVAN'),
+(15078864650001, 'CARDENAS PERAN LUIS IVAN'),
+(15078864650001, 'CARDENAS PERAN LUIS IVAN'),
+(15066824830000, 'JERIA FERNANDEZ MONICA DEL CARMEN'),
+(15097226310400, 'LAPPONI LETICIA NOEMI'),
+(15096607830700, 'MIRANDA MIGUEL ALBERTO'),
+(14009498180100, 'D?ORAZIO CLAUDIA MARCELA'),
+(15034089680300, 'GONZALEZ ANDRES'),
+(15097146400800, 'SANDOVAL ELIDIA'),
+(15085708420200, 'LEON JORGE RAUL'),
+(14011759350600, 'ROJAS CLOTILDE BEATRIZ'),
+(15095368490702, 'QUIROZ ALEXANDRO EXEQUIEL');
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `practicas`
+--
+
+CREATE TABLE `practicas` (
+  `id` int(255) NOT NULL,
+  `cod_paci` int(255) NOT NULL,
+  `cod_prof` int(255) NOT NULL,
+  `cod_practica` int(255) NOT NULL,
+  `fecha` date NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `prof`
+--
+
+CREATE TABLE `prof` (
+  `cod_prof` int(11) NOT NULL,
+  `nombre` varchar(255) NOT NULL,
+  `apellido` varchar(255) NOT NULL,
+  `especialidad` varchar(255) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `tipo_prac`
+--
+
+CREATE TABLE `tipo_prac` (
+  `id` int(11) NOT NULL,
+  `descript` varchar(255) NOT NULL,
+  `cod_practica` int(255) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `tipo_prac`
+--
+
+INSERT INTO `tipo_prac` (`id`, `descript`, `cod_practica`) VALUES
+(1, 'PRESCRIPCION FARMACOLOGICA Y SEGUIMIENTO DE CONTROL DE TRATAMIENTO', 521001),
+(2, 'PSICOTERAPIA INDIVIDUAL (SESIONES DE 30 A 60 MINUTOS)', 520001);
+
 --
 -- Índices para tablas volcadas
 --
+
+--
+-- Indices de la tabla `credenciales`
+--
+ALTER TABLE `credenciales`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indices de la tabla `credenciales_estadisticas`
+--
+ALTER TABLE `credenciales_estadisticas`
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Indices de la tabla `diagnostico`
@@ -515,6 +760,91 @@ INSERT INTO `diagnostico` (`cod_diag`, `descript`) VALUES
 ALTER TABLE `diagnostico`
   ADD PRIMARY KEY (`cod_diag`),
   ADD KEY `cod_diag` (`cod_diag`);
+
+--
+-- Indices de la tabla `paciente`
+--
+ALTER TABLE `paciente`
+  ADD PRIMARY KEY (`cod_paci`),
+  ADD KEY `cod_prof` (`cod_prof`,`cod_practica`),
+  ADD KEY `cod_practica` (`cod_practica`),
+  ADD KEY `benef` (`benef`),
+  ADD KEY `cod_diag` (`cod_diag`);
+
+--
+-- Indices de la tabla `padron`
+--
+ALTER TABLE `padron`
+  ADD KEY `benef` (`benef`);
+
+--
+-- Indices de la tabla `practicas`
+--
+ALTER TABLE `practicas`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `cod_paci` (`cod_paci`),
+  ADD KEY `cod_prof` (`cod_prof`,`cod_practica`),
+  ADD KEY `cod_practica` (`cod_practica`);
+
+--
+-- Indices de la tabla `prof`
+--
+ALTER TABLE `prof`
+  ADD PRIMARY KEY (`cod_prof`);
+
+--
+-- Indices de la tabla `tipo_prac`
+--
+ALTER TABLE `tipo_prac`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `cod_practica` (`cod_practica`);
+
+--
+-- AUTO_INCREMENT de las tablas volcadas
+--
+
+--
+-- AUTO_INCREMENT de la tabla `credenciales`
+--
+ALTER TABLE `credenciales`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
+-- AUTO_INCREMENT de la tabla `credenciales_estadisticas`
+--
+ALTER TABLE `credenciales_estadisticas`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
+-- AUTO_INCREMENT de la tabla `paciente`
+--
+ALTER TABLE `paciente`
+  MODIFY `cod_paci` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
+-- AUTO_INCREMENT de la tabla `prof`
+--
+ALTER TABLE `prof`
+  MODIFY `cod_prof` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=43;
+
+--
+-- AUTO_INCREMENT de la tabla `tipo_prac`
+--
+ALTER TABLE `tipo_prac`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
+-- Restricciones para tablas volcadas
+--
+
+--
+-- Filtros para la tabla `paciente`
+--
+ALTER TABLE `paciente`
+  ADD CONSTRAINT `paciente_ibfk_1` FOREIGN KEY (`cod_diag`) REFERENCES `diagnostico` (`cod_diag`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `paciente_ibfk_2` FOREIGN KEY (`cod_prof`) REFERENCES `prof` (`cod_prof`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `paciente_ibfk_3` FOREIGN KEY (`benef`) REFERENCES `padron` (`benef`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `paciente_ibfk_4` FOREIGN KEY (`cod_practica`) REFERENCES `tipo_prac` (`cod_practica`) ON DELETE CASCADE ON UPDATE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
