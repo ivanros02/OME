@@ -459,5 +459,34 @@ function obtenerDiagnostico()
     }
 }
 
+function obtenerDiagnosticoConDescripcion()
+{
+    global $conn;
+
+    // Preparar la consulta SQL
+    $sql = "SELECT cod_diag, descript FROM diagnostico";
+
+    // Ejecutar la consulta
+    $result = $conn->query($sql);
+
+    // Verificar si se encontraron diagnósticos
+    if ($result->num_rows > 0) {
+        // Inicializar un array para almacenar los diagnósticos con descripciones
+        $diagnosticos = array();
+
+        // Iterar sobre los resultados y almacenar cada diagnóstico con su descripción en el array
+        while ($row = $result->fetch_assoc()) {
+            $diagnosticos[] = $row;
+        }
+
+        // Devolver el array de diagnósticos con descripciones
+        return $diagnosticos;
+    } else {
+        // Devolver un array vacío si no se encontraron diagnósticos
+        return array();
+    }
+}
+
+
 
 ?>

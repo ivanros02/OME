@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 13-03-2024 a las 23:54:02
+-- Tiempo de generación: 14-03-2024 a las 22:30:09
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.2.12
 
@@ -28,15 +28,16 @@ SET time_zone = "+00:00";
 --
 
 CREATE TABLE `diagnostico` (
-  `cod_diag` varchar(255) NOT NULL
+  `cod_diag` varchar(255) NOT NULL,
+  `descript` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Volcado de datos para la tabla `diagnostico`
 --
 
-INSERT INTO `diagnostico` (`cod_diag`) VALUES
-('F99');
+INSERT INTO `diagnostico` (`cod_diag`, `descript`) VALUES
+('F99', '');
 
 --
 -- Índices para tablas volcadas

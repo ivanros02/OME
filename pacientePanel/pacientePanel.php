@@ -5,7 +5,8 @@ require_once '../controlador/control_paciente.php';
 
 
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es" charset="UTF-8">
+
 
 <head>
     <meta charset="UTF-8">
@@ -37,7 +38,7 @@ require_once '../controlador/control_paciente.php';
 
     <?php
 
-    if (isset($_SESSION['alert_message'])) {
+    if (isset ($_SESSION['alert_message'])) {
         // Muestra el mensaje de alerta
         echo "<script>alert('" . $_SESSION['alert_message'] . "');</script>";
         // Elimina el mensaje de alerta de la sesión para que no se muestre de nuevo
@@ -72,7 +73,7 @@ require_once '../controlador/control_paciente.php';
 
             <div class="mb-4 flex items-center">
                 <label for="benef" class="block text-sm font-medium text-gray-700 mr-2">Beneficio:</label>
-                <input type="number" id="benef" name="benef" required
+                <input type="number" id="benef" name="benef" required pattern="[0-9]*"
                     class="mt-1 p-2 block w-1/2 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500 mr-2">
                 <button type="button" id="verificarBeneficio"
                     class="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded">
@@ -102,19 +103,20 @@ require_once '../controlador/control_paciente.php';
             </div>
 
             <div class="mb-4">
+    <label for="cod_diag" class="block text-sm font-medium text-gray-700">Diagnóstico:</label>
+    <select id="cod_diag" name="cod_diag" required
+            class="mt-1 p-2 block w-full border border-gray-300 rounded-md focus:outline-none focus:border-blue-500">
+        <option value="">Seleccionar Diagnóstico</option>
+        <?php
+        $diagnosticos = obtenerDiagnosticoConDescripcion(); // Obtener la lista de diagnósticos con descripciones
+        foreach ($diagnosticos as $diagnostico) {
+            echo "<option value='" . $diagnostico['cod_diag'] . "'>" . $diagnostico['cod_diag'] . " - " . $diagnostico['descript'] . "</option>";
+        }
+        ?>
+    </select>
+</div>
 
-                <label for="cod_diag" class="block text-sm font-medium text-gray-700">Diagnóstico:</label>
-                <select id="cod_diag" name="cod_diag" required
-                    class="mt-1 p-2 block w-full border border-gray-300 rounded-md focus:outline-none focus:border-blue-500">
-                    <option value="">Seleccionar Diagnóstico</option>
-                    <?php
-                    $cod_diag_list = obtenerDiagnostico(); // Obtener la lista de diagnósticos
-                    foreach ($cod_diag_list as $cod_diag_item) {
-                        echo "<option value='" . $cod_diag_item . "'>" . $cod_diag_item . "</option>";
-                    }
-                    ?>
-                </select>
-            </div>
+
 
 
             <div class="mb-4">

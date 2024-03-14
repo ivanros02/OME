@@ -43,7 +43,7 @@ foreach ($pacientes as $paciente) {
     $sheet->setCellValue('D' . $row, obtenerNombreProfesional($paciente["cod_prof"]));
     $sheet->setCellValue('E' . $row, obtenerEspecialidadProfesional($paciente["cod_prof"]));
     $sheet->setCellValue('F' . $row, $paciente["cod_practica"]);
-    $sheet->setCellValue('G' . $row, $paciente["fecha"]);
+    $sheet->setCellValue('G' . $row, date('d/m/Y', strtotime($paciente["fecha"])));
     $sheet->setCellValue('H' . $row, $paciente["cod_diag"]);
     $sheet->setCellValue('I' . $row, $paciente["cargado"]);
     $row++;
