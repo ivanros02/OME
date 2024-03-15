@@ -379,7 +379,7 @@ function obtenerProfesionales()
     global $conn;
 
     // Preparar la consulta SQL
-    $sql = "SELECT cod_prof, apellido FROM prof";
+    $sql = "SELECT cod_prof, nombre, apellido FROM prof";
 
     // Ejecutar la consulta
     $result = $conn->query($sql);
@@ -401,6 +401,7 @@ function obtenerProfesionales()
         return array();
     }
 }
+
 
 
 function obtenerCodigosPractica()

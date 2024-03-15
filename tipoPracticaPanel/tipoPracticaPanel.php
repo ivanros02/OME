@@ -7,14 +7,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['agregar'])) {
     $cod_practica = $_POST['cod_practica'];
 
     if (agregarTipoPractica($descripcion, $cod_practica)) {
-        echo "<script>alert('Tipo de práctica agregado correctamente');</script>";
+        $_SESSION['success_message'] = "Tipo de práctica agregado correctamente";
     } else {
-        echo "<script>alert('Error al agregar el tipo de práctica');</script>";
+        $_SESSION['error_message'] = "Error al agregar el tipo de práctica";
     }
 
-    // Redirigir para evitar reenvío del formulario al recargar la página
+    // Redirigir después de procesar el formulario
     header("Location: tipoPracticaPanel.php");
-    exit(); // Detener el script después de la redirección
+    exit(); // Asegurar que el script se detenga después de la redirección
 }
 
 // Procesar la solicitud de eliminar un tipo de práctica
@@ -24,24 +24,17 @@ if (isset($_GET['eliminar'])) {
     // Si se ha confirmado la eliminación, proceder con la eliminación
     if (isset($_GET['confirmar'])) {
         if (eliminarTipoPractica($id)) {
-            echo "<script>alert('Tipo de práctica eliminado correctamente');</script>";
+            $_SESSION['success_message'] = "Tipo de práctica eliminado correctamente";
         } else {
-            echo "<script>alert('Error al eliminar el tipo de práctica');</script>";
+            $_SESSION['error_message'] = "Error al eliminar el tipo de práctica";
         }
 
-        // Redirigir para evitar problemas al recargar la página
+        // Redirigir después de procesar la eliminación
         header("Location: tipoPracticaPanel.php");
-        exit();
+        exit(); // Asegurar que el script se detenga después de la redirección
     } else {
         // Si no se ha confirmado, mostrar la ventana de confirmación
-        echo "<script>
-                var confirmar = confirm('¿Estás seguro de que quieres eliminar este tipo de práctica?');
-                if (confirmar) {
-                    window.location.href = 'tipoPracticaPanel.php?eliminar=$id&confirmar=1';
-                } else {
-                    window.location.href = 'tipoPracticaPanel.php';
-                }
-              </script>";
+        header("Location: tipoPracticaPanel.php?confirmar_eliminar=$id");
         exit();
     }
 }

@@ -64,11 +64,14 @@ require_once '../controlador/control_paciente.php';
                     <?php
                     $profesionales = obtenerProfesionales();
                     foreach ($profesionales as $profesional) {
-                        echo "<option value='" . $profesional['cod_prof'] . "'>" . $profesional['apellido'] . "</option>";
+                        echo "<option value='" . $profesional['cod_prof'] . "'>" . $profesional['nombre'] . " " . $profesional['apellido'] . "</option>";
                     }
                     ?>
                 </select>
             </div>
+
+
+
 
 
             <div class="mb-4 flex items-center">
@@ -103,18 +106,18 @@ require_once '../controlador/control_paciente.php';
             </div>
 
             <div class="mb-4">
-    <label for="cod_diag" class="block text-sm font-medium text-gray-700">Diagnóstico:</label>
-    <select id="cod_diag" name="cod_diag" required
-            class="mt-1 p-2 block w-full border border-gray-300 rounded-md focus:outline-none focus:border-blue-500">
-        <option value="">Seleccionar Diagnóstico</option>
-        <?php
-        $diagnosticos = obtenerDiagnosticoConDescripcion(); // Obtener la lista de diagnósticos con descripciones
-        foreach ($diagnosticos as $diagnostico) {
-            echo "<option value='" . $diagnostico['cod_diag'] . "'>" . $diagnostico['cod_diag'] . " - " . $diagnostico['descript'] . "</option>";
-        }
-        ?>
-    </select>
-</div>
+                <label for="cod_diag" class="block text-sm font-medium text-gray-700">Diagnóstico:</label>
+                <select id="cod_diag" name="cod_diag" required
+                    class="mt-1 p-2 block w-full border border-gray-300 rounded-md focus:outline-none focus:border-blue-500">
+                    <option value="">Seleccionar Diagnóstico</option>
+                    <?php
+                    $diagnosticos = obtenerDiagnosticoConDescripcion(); // Obtener la lista de diagnósticos con descripciones
+                    foreach ($diagnosticos as $diagnostico) {
+                        echo "<option value='" . $diagnostico['cod_diag'] . "'>" . $diagnostico['cod_diag'] . " - " . $diagnostico['descript'] . "</option>";
+                    }
+                    ?>
+                </select>
+            </div>
 
 
 
