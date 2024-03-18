@@ -123,10 +123,11 @@ require_once '../controlador/control_paciente.php';
 
 
             <div class="mb-4">
-                <label for="fecha" class="block text-sm font-medium text-gray-700">Fecha:</label>
-                <input type="date" id="fecha" name="fecha" required
+                <label for="fecha" class="block text-sm font-medium text-gray-700">Fecha y Hora:</label>
+                <input type="datetime-local" id="fecha" name="fecha" required
                     class="mt-1 p-2 block w-full border border-gray-300 rounded-md focus:outline-none focus:border-blue-500">
             </div>
+
 
 
 

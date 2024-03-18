@@ -66,6 +66,11 @@ $totalPacientes = obtenerTotalPacientes();
         <a href="generar_reporte_excel.php?fecha_desde=<?php echo $fecha_desde; ?>&fecha_hasta=<?php echo $fecha_hasta; ?>&profesional=<?php echo $profesional; ?>" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">Exportar a Excel</a>
         </div>
 
+        <div class="mb-4">
+        <a href="generar_reporte_pdf.php?fecha_desde=<?php echo $fecha_desde; ?>&fecha_hasta=<?php echo $fecha_hasta; ?>&profesional=<?php echo $profesional; ?>" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Exportar a PDF</a>
+        </div>
+
+
         <!-- Formulario de filtro -->
         <form method="GET" class="mb-8">
             <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
@@ -130,7 +135,7 @@ $totalPacientes = obtenerTotalPacientes();
                     echo "<td class='border px-4 py-2'>" . obtenerNombreProfesional($paciente["cod_prof"]) . "</td>";
                     echo "<td class='border px-4 py-2'>" . obtenerEspecialidadProfesional($paciente["cod_prof"]) . "</td>";
                     echo "<td class='border px-4 py-2'>" . obtenerDescripcionPractica($paciente["cod_practica"]) . "</td>";
-                    echo "<td class='border px-4 py-2'>" . date('d/m/Y', strtotime($paciente["fecha"])) . "</td>";
+                    echo "<td class='border px-4 py-2'>" . date('d/m/Y H:i:s', strtotime($paciente["fecha"])) . "</td>";
                     echo "<td class='border px-4 py-2'>";
                     // Formulario para cambiar el estado 'cargado'
                     echo "<form method='post'>";
