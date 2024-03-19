@@ -150,37 +150,6 @@ function obtenerTotalPacientes()
 
 
 
-// Función para obtener los detalles de un paciente por su ID
-function obtenerPacientePorID($cod_paci)
-{
-    global $conn;
-
-    // Preparar la consulta SQL
-    $sql = "SELECT * FROM paciente WHERE cod_paci = ?";
-
-    // Preparar la sentencia
-    $stmt = $conn->prepare($sql);
-
-    // Vincular el parámetro
-    $stmt->bind_param("i", $cod_paci);
-
-    // Ejecutar la consulta
-    $stmt->execute();
-
-    // Obtener el resultado
-    $result = $stmt->get_result();
-
-    // Verificar si se encontró el paciente
-    if ($result->num_rows > 0) {
-        // Devolver los detalles del paciente
-        return $result->fetch_assoc();
-    } else {
-        // Devolver false si no se encontró el paciente
-        return false;
-    }
-}
-
-
 function obtenerNombreYApellidoPorBeneficio($beneficio)
 {
     global $conn;
@@ -252,7 +221,7 @@ function obtenerNombreProfesional($cod_prof)
     if ($result->num_rows > 0) {
         // Obtener el nombre y apellido del profesional
         $row = $result->fetch_assoc();
-        return $row['nombre'] . ' ' . $row['apellido'];
+        return $row['apellido'] . ' ' . $row['nombre'];
     } else {
         // Devolver false si no se encontró el profesional
         return false;
@@ -289,12 +258,13 @@ function actualizarEstadoCargado($cod_paci, $nuevo_estado)
 
 
 
-function obtenerPacientesPorProfesional($cod_prof)
-{
+// Función para obtener los pacientes de un profesional específico
+function obtenerPacientesPorProfesional($cod_prof) {
     global $conn;
 
-    // Preparar la consulta SQL para obtener los pacientes por el código del profesional
+    // Preparar la consulta SQL para obtener los pacientes del profesional
     $sql = "SELECT * FROM paciente WHERE cod_prof = ?";
+
 
     // Preparar la sentencia
     $stmt = $conn->prepare($sql);
@@ -313,7 +283,7 @@ function obtenerPacientesPorProfesional($cod_prof)
         // Inicializar un array para almacenar los pacientes
         $pacientes = array();
 
-        // Iterar sobre los resultados y almacenarlos en el array
+        // Iterar sobre los resultados
         while ($row = $result->fetch_assoc()) {
             $pacientes[] = $row;
         }
@@ -321,10 +291,32 @@ function obtenerPacientesPorProfesional($cod_prof)
         // Devolver el array de pacientes
         return $pacientes;
     } else {
-        // Devolver un array vacío si no se encontraron pacientes
+        // Si no se encontraron pacientes, devolver un array vacío
         return array();
     }
 }
+
+
+
+if (isset($_GET['obtenerPacientesPorProfesional']) && isset($_GET['cod_prof'])) {
+    $cod_prof = $_GET['cod_prof'];
+    $pacientes = obtenerPacientesPorProfesional($cod_prof);
+    echo json_encode($pacientes);
+    exit();
+}
+
+// Procesar la solicitud de obtener el nombre del profesional por su código
+if (isset($_GET['obtenerNombreProfesional']) && isset($_GET['cod_prof'])) {
+    $cod_prof = $_GET['cod_prof'];
+    $nombreProfesional = obtenerNombreProfesional($cod_prof);
+    if ($nombreProfesional) {
+        echo json_encode(array('success' => true, 'nombreProfesional' => $nombreProfesional));
+    } else {
+        echo json_encode(array('success' => false, 'message' => 'Profesional no encontrado'));
+    }
+    exit();
+}
+
 
 
 

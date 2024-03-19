@@ -8,17 +8,7 @@ if (!isset ($_SESSION['usuario'])) {
     exit; // Asegura que el script se detenga después de redirigir
 }
 
-// Verificar si se ha enviado el formulario con el código de profesional seleccionado
-if(isset($_POST['cod_prof'])) {
-    // Obtener el código del profesional seleccionado
-    $cod_prof = $_POST['cod_prof'];
-    
-    // Obtener los pacientes asociados al profesional seleccionado
-    $pacientes = obtenerPacientesPorProfesional($cod_prof);
-}
-
 ?>
-
 
 <!DOCTYPE html>
 <html lang="es" charset="UTF-8">
@@ -44,6 +34,25 @@ if(isset($_POST['cod_prof'])) {
             border-radius: 12px;
             /* Radio de borde para hacerlo más redondeado */
         }
+
+        /* Estilos para la tabla */
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        /* Estilos para las celdas de la tabla */
+        .table td,
+        .table th {
+            padding: 8px;
+            border: 1px solid #dddddd;
+            text-align: left;
+        }
+
+        /* Estilos para el encabezado de la tabla */
+        .table th {
+            background-color: #f2f2f2;
+        }
     </style>
 </head>
 
@@ -61,9 +70,6 @@ if(isset($_POST['cod_prof'])) {
         unset($_SESSION['alert_message']);
     }
     ?>
-    <div id="modalContainer" class="modal-container">
-        <div class="modal-content" id="qrModalContent"></div>
-    </div>
     <div class="container mx-auto px-4 py-8 relative"> <!-- Añadir relative para el posicionamiento absoluto -->
         <img src="../img/prestaciones.jpeg" alt="Imagen" class="image-top-right hidden sm:block">
         <h1 class="text-3xl font-bold mb-4">Panel de Prestaciones</h1>
@@ -71,18 +77,16 @@ if(isset($_POST['cod_prof'])) {
         <!-- Formulario para agregar nuevo paciente -->
         <h2 class="text-2xl font-bold mb-2">Agregar Nueva Prestacion</h2>
         <form method="post" class="mb-4" id="formAgregar">
-
-              <!-- Formulario para seleccionar el profesional -->
-        <form method="post" class="mb-4">
+            <!-- Formulario para seleccionar el profesional -->
             <div class="mb-4">
                 <label for="cod_prof" class="block text-sm font-medium text-gray-700">Profesional:</label>
                 <select id="cod_prof" name="cod_prof" required
                     class="mt-1 p-2 block w-full border border-gray-300 rounded-md focus:outline-none focus:border-blue-500">
                     <option value="">Seleccionar Profesional</option>
                     <?php
+                    require_once '../controlador/control_paciente.php';
                     // Obtener la lista de profesionales
                     $profesionales = obtenerProfesionales();
-
                     // Mostrar los profesionales ordenados
                     foreach ($profesionales as $profesional) {
                         echo "<option value='" . $profesional['cod_prof'] . "'>" . $profesional['apellido'] . " " . $profesional['nombre'] . "</option>";
@@ -90,12 +94,6 @@ if(isset($_POST['cod_prof'])) {
                     ?>
                 </select>
             </div>
-
-            <button type="submit"
-                class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded">Mostrar Pacientes</button>
-
-
-
 
 
             <div class="mb-4 flex items-center">
@@ -107,8 +105,6 @@ if(isset($_POST['cod_prof'])) {
                     Verificar
                 </button>
             </div>
-
-
             <div class="mb-4">
                 <label for="nombreYapellido" class="block text-sm font-medium text-gray-700">Nombre y Apellido:</label>
                 <input type="text" id="nombreYapellido" name="nombreYapellido" required
@@ -142,94 +138,165 @@ if(isset($_POST['cod_prof'])) {
                     ?>
                 </select>
             </div>
-
-
-
-
             <div class="mb-4">
                 <label for="fecha" class="block text-sm font-medium text-gray-700">Fecha y Hora:</label>
                 <input type="datetime-local" id="fecha" name="fecha" required
                     class="mt-1 p-2 block w-full border border-gray-300 rounded-md focus:outline-none focus:border-blue-500">
             </div>
-
-
-
-
             <button type="submit" name="agregar" id="btnAgregar"
                 class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded" disabled>
                 Agregar
             </button>
+
         </form>
 
+        <button id="btnGenerarPDF" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded">
+            Generar PDF
+        </button>
 
 
-    </div>
+        <div id="contenedorPacientes"></div>
+        <!-- Aquí va el script de JavaScript -->
+        <script>
 
-    <?php if(isset($pacientes) && !empty($pacientes)): ?>
-    <div class="container mx-auto px-4 py-8">
-        <table class="border-collapse border border-gray-800 w-full">
-            <thead>
-                <tr>
-                    <th class="border border-gray-400 px-4 py-2">Nombre y Apellido</th>
-                    <th class="border border-gray-400 px-4 py-2">Beneficio</th>
-                    <th class="border border-gray-400 px-4 py-2">Profesional</th>
-                    <th class="border border-gray-400 px-4 py-2">Practica</th>
-                    <!-- Agrega más columnas según sea necesario -->
-                </tr>
-            </thead>
-            <tbody>
-                <?php foreach ($pacientes as $paciente): ?>
-                <tr>
-                    
-                    <td class="border border-gray-400 px-4 py-2"><?php echo $paciente['nombreYapellido']; ?></td>
-                    <td class="border border-gray-400 px-4 py-2"><?php echo $paciente['benef']; ?></td>
-                    <td class='border border-gray-400 px-4 py-2'><?php echo obtenerNombreProfesional($paciente["cod_prof"]) ?></td>
-                    <td class='border border-gray-400 px-4 py-2'><?php echo obtenerDescripcionPractica($paciente["cod_practica"]) ?></td>
-                    <!-- Agrega más celdas según sea necesario -->
-                </tr>
-                <?php endforeach; ?>
-            </tbody>
-        </table>
-    </div>
-    <?php elseif(isset($pacientes) && empty($pacientes)): ?>
-    <div class="container mx-auto px-4 py-8">
-        <p>No se encontraron pacientes asociados al profesional seleccionado.</p>
-    </div>
-    <?php endif; ?>
-               
-    </div>
+            document.getElementById('btnGenerarPDF').addEventListener('click', function () {
+                // Llamar a la función para generar el PDF
+                generarPDF();
 
-    <script>
-        
-        document.getElementById('verificarBeneficio').addEventListener('click', function () {
-            var beneficio = document.getElementById('benef').value;
-            if (beneficio.trim() !== '') {
-                fetch('../controlador/control_paciente.php?verificarBeneficio&benef=' + beneficio)
-                    .then(response => response.json())
-                    .then(data => {
-                        if (data.success) {
-                            document.getElementById('nombreYapellido').value = data.nombreYapellido;
-                            document.getElementById('btnAgregar').disabled = false;
-                        } else {
-                            if (data.completar) {
-                                alert('Completar número de beneficio.');
-                            } else {
-                                alert(data.message);
-                            }
-                            document.getElementById('nombreYapellido').value = ''; // Limpiar el campo si el beneficio no existe
-                            document.getElementById('btnAgregar').disabled = false; // Deshabilitar el botón si el beneficio no existe
-                        }
-                    })
-                    .catch(error => console.error('Error:', error));
-            } else {
-                alert('Por favor ingrese un número de beneficio.');
+            });
+
+            function generarPDF() {
+                // Obtener el ID del profesional seleccionado
+                var cod_prof = document.getElementById('cod_prof').value;
+
+                // Crear la URL para generar el PDF con el ID del profesional como parámetro
+                var url = './generar_pdf.php?profesional=' + cod_prof;
+
+                // Redireccionar a la URL para generar el PDF
+                window.location.href = url;
             }
-        });
 
 
 
 
-    </script>
+            // Dentro de tu función cargarPacientesPorProfesional en tu archivo HTML
+            function cargarPacientesPorProfesional(cod_prof) {
+                console.log("Cargando pacientes para el profesional con el código: " + cod_prof);
+
+                fetch('../controlador/control_paciente.php?obtenerPacientesPorProfesional=true&cod_prof=' + cod_prof)
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Hubo un problema al cargar los pacientes. Estado de la respuesta: ' + response.status);
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        console.log("Datos de pacientes cargados con éxito:", data);
+                        mostrarPacientes(data); // Llamar a la función para mostrar los pacientes
+                    })
+                    .catch(error => {
+                        console.error('Error al cargar pacientes:', error);
+                        // Aquí puedes mostrar un mensaje de error al usuario si lo deseas
+                    });
+            }
+
+
+
+
+
+            // Función para mostrar los pacientes en una tabla
+            function mostrarPacientes(pacientes) {
+                var contenedorPacientes = document.getElementById('contenedorPacientes');
+                contenedorPacientes.innerHTML = ''; // Limpiar cualquier contenido anterior de pacientes
+
+                // Crear la tabla y sus encabezados
+                var table = document.createElement('table');
+                table.classList.add('table'); // Agregar la clase 'table'
+                var thead = document.createElement('thead');
+                var headerRow = document.createElement('tr');
+                headerRow.innerHTML = '<th>Nombre y Apellido</th><th>Beneficio</th><th>Profesional</th><th>Práctica</th><th>Diagnóstico</th><th>Fecha</th>'; // Agregado: Fecha
+                thead.appendChild(headerRow);
+                table.appendChild(thead);
+
+                // Crear el cuerpo de la tabla
+                var tbody = document.createElement('tbody');
+                pacientes.forEach(function (paciente) {
+                    var row = document.createElement('tr');
+                    // Llamar a la función para obtener el nombre del profesional por AJAX
+                    fetch('../controlador/control_paciente.php?obtenerNombreProfesional&cod_prof=' + paciente.cod_prof)
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.success) {
+                                // Formatear la fecha
+                                var fecha = new Date(paciente.fecha);
+                                var fechaFormateada = fecha.getDate() + '/' + (fecha.getMonth() + 1) + '/' + fecha.getFullYear();
+
+                                // Agregar los datos del paciente a la fila de la tabla
+                                row.innerHTML = '<td>' + paciente.nombreYapellido + '</td><td>' + paciente.benef + '</td><td>' + data.nombreProfesional + '</td><td>' + paciente.cod_practica + '</td><td>' + paciente.cod_diag + '</td><td>' + fechaFormateada + '</td>'; // Agregado: Fecha
+                            } else {
+                                console.error('Error al obtener el nombre del profesional:', data.message);
+                                // Si hay un error, mostrar solo los detalles del paciente sin el nombre del profesional
+                                row.innerHTML = '<td>' + paciente.nombreYapellido + '</td><td>' + paciente.benef + '</td><td></td><td>' + paciente.cod_practica + '</td><td>' + paciente.cod_diag + '</td><td>' + paciente.fecha + '</td>'; // Agregado: Fecha
+                            }
+                            // Agregar la fila a la tabla
+                            tbody.appendChild(row);
+                        })
+                        .catch(error => {
+                            console.error('Error:', error);
+                            // Si hay un error, mostrar solo los detalles del paciente sin el nombre del profesional
+                            row.innerHTML = '<td>' + paciente.nombreYapellido + '</td><td>' + paciente.benef + '</td><td></td><td>' + paciente.cod_practica + '</td><td>' + paciente.cod_diag + '</td><td>' + paciente.fecha + '</td>'; // Agregado: Fecha
+                            // Agregar la fila a la tabla
+                            tbody.appendChild(row);
+                        });
+                });
+                // Agregar el cuerpo de la tabla al elemento contenedor
+                table.appendChild(tbody);
+                contenedorPacientes.appendChild(table);
+            }
+
+
+
+
+
+
+
+
+            // Agrega un event listener para detectar cambios en el elemento select con id cod_prof
+            document.getElementById('cod_prof').addEventListener('change', function () {
+                var cod_prof = this.value; // Obtener el valor seleccionado del profesional
+                cargarPacientesPorProfesional(cod_prof); // Llamar a la función para cargar pacientes por profesional
+            });
+
+
+            document.getElementById('verificarBeneficio').addEventListener('click', function () {
+                var beneficio = document.getElementById('benef').value;
+                if (beneficio.trim() !== '') {
+                    fetch('../controlador/control_paciente.php?verificarBeneficio&benef=' + beneficio)
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.success) {
+                                document.getElementById('nombreYapellido').value = data.nombreYapellido;
+                                document.getElementById('btnAgregar').disabled = false;
+                            } else {
+                                if (data.completar) {
+                                    alert('Completar número de beneficio.');
+                                } else {
+                                    alert(data.message);
+                                }
+                                document.getElementById('nombreYapellido').value = ''; // Limpiar el campo si el beneficio no existe
+                                document.getElementById('btnAgregar').disabled = false; // Deshabilitar el botón si el beneficio no existe
+                            }
+                        })
+                        .catch(error => console.error('Error:', error));
+                } else {
+                    alert('Por favor ingrese un número de beneficio.');
+                }
+            });
+
+
+
+
+        </script>
 
 </body>
 
