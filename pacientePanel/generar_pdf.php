@@ -23,6 +23,9 @@ $nombreProfesional = obtenerNombreProfesional($profesional);
 // Definir el contenido del PDF
 $content = '<h1>Reporte de Pacientes del Profesional:' . $nombreProfesional .'</h1>';
 
+// Obtener y mostrar el total de pacientes para el profesional específico
+$totalPacientesProfesional = obtenerTotalPacientesParaProfesional($profesional);
+$content .= '<p>Total de Pacientes: ' . $totalPacientesProfesional . '</p>';
 
 // Verificar si hay pacientes para mostrar
 if (!empty($pacientes)) {
