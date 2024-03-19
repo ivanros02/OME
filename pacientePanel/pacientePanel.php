@@ -1,6 +1,22 @@
 <?php
 require_once '../controlador/control_paciente.php';
 
+
+// Verificar si el usuario está autenticado
+if (!isset ($_SESSION['usuario'])) {
+    header("Location: ../index.php");
+    exit; // Asegura que el script se detenga después de redirigir
+}
+
+// Verificar si se ha enviado el formulario con el código de profesional seleccionado
+if(isset($_POST['cod_prof'])) {
+    // Obtener el código del profesional seleccionado
+    $cod_prof = $_POST['cod_prof'];
+    
+    // Obtener los pacientes asociados al profesional seleccionado
+    $pacientes = obtenerPacientesPorProfesional($cod_prof);
+}
+
 ?>
 
 
@@ -56,19 +72,27 @@ require_once '../controlador/control_paciente.php';
         <h2 class="text-2xl font-bold mb-2">Agregar Nueva Prestacion</h2>
         <form method="post" class="mb-4" id="formAgregar">
 
+              <!-- Formulario para seleccionar el profesional -->
+        <form method="post" class="mb-4">
             <div class="mb-4">
                 <label for="cod_prof" class="block text-sm font-medium text-gray-700">Profesional:</label>
                 <select id="cod_prof" name="cod_prof" required
                     class="mt-1 p-2 block w-full border border-gray-300 rounded-md focus:outline-none focus:border-blue-500">
                     <option value="">Seleccionar Profesional</option>
                     <?php
+                    // Obtener la lista de profesionales
                     $profesionales = obtenerProfesionales();
+
+                    // Mostrar los profesionales ordenados
                     foreach ($profesionales as $profesional) {
-                        echo "<option value='" . $profesional['cod_prof'] . "'>" . $profesional['nombre'] . " " . $profesional['apellido'] . "</option>";
+                        echo "<option value='" . $profesional['cod_prof'] . "'>" . $profesional['apellido'] . " " . $profesional['nombre'] . "</option>";
                     }
                     ?>
                 </select>
             </div>
+
+            <button type="submit"
+                class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded">Mostrar Pacientes</button>
 
 
 
@@ -138,12 +162,45 @@ require_once '../controlador/control_paciente.php';
         </form>
 
 
+
     </div>
 
-
+    <?php if(isset($pacientes) && !empty($pacientes)): ?>
+    <div class="container mx-auto px-4 py-8">
+        <table class="border-collapse border border-gray-800 w-full">
+            <thead>
+                <tr>
+                    <th class="border border-gray-400 px-4 py-2">Nombre y Apellido</th>
+                    <th class="border border-gray-400 px-4 py-2">Beneficio</th>
+                    <th class="border border-gray-400 px-4 py-2">Profesional</th>
+                    <th class="border border-gray-400 px-4 py-2">Practica</th>
+                    <!-- Agrega más columnas según sea necesario -->
+                </tr>
+            </thead>
+            <tbody>
+                <?php foreach ($pacientes as $paciente): ?>
+                <tr>
+                    
+                    <td class="border border-gray-400 px-4 py-2"><?php echo $paciente['nombreYapellido']; ?></td>
+                    <td class="border border-gray-400 px-4 py-2"><?php echo $paciente['benef']; ?></td>
+                    <td class='border border-gray-400 px-4 py-2'><?php echo obtenerNombreProfesional($paciente["cod_prof"]) ?></td>
+                    <td class='border border-gray-400 px-4 py-2'><?php echo obtenerDescripcionPractica($paciente["cod_practica"]) ?></td>
+                    <!-- Agrega más celdas según sea necesario -->
+                </tr>
+                <?php endforeach; ?>
+            </tbody>
+        </table>
+    </div>
+    <?php elseif(isset($pacientes) && empty($pacientes)): ?>
+    <div class="container mx-auto px-4 py-8">
+        <p>No se encontraron pacientes asociados al profesional seleccionado.</p>
+    </div>
+    <?php endif; ?>
+               
     </div>
 
     <script>
+        
         document.getElementById('verificarBeneficio').addEventListener('click', function () {
             var beneficio = document.getElementById('benef').value;
             if (beneficio.trim() !== '') {

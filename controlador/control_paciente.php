@@ -432,34 +432,6 @@ function obtenerCodigosPractica()
     }
 }
 
-function obtenerDiagnostico()
-{
-    global $conn;
-
-    // Preparar la consulta SQL
-    $sql = "SELECT cod_diag FROM diagnostico";
-
-    // Ejecutar la consulta
-    $result = $conn->query($sql);
-
-    // Verificar si se encontraron códigos de práctica
-    if ($result->num_rows > 0) {
-        // Inicializar un array para almacenar los códigos de práctica
-        $codigos_practica = array();
-
-        // Iterar sobre los resultados y almacenar los códigos de práctica en el array
-        while ($row = $result->fetch_assoc()) {
-            $codigos_practica[] = $row['cod_diag'];
-        }
-
-        // Devolver el array de códigos de práctica
-        return $codigos_practica;
-    } else {
-        // Devolver un array vacío si no se encontraron códigos de práctica
-        return array();
-    }
-}
-
 function obtenerDiagnosticoConDescripcion()
 {
     global $conn;
@@ -487,7 +459,5 @@ function obtenerDiagnosticoConDescripcion()
         return array();
     }
 }
-
-
 
 ?>
