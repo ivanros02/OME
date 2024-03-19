@@ -32,12 +32,12 @@ if (!empty ($profesional)) {
     $nombreProfesional = obtenerNombreProfesional($profesional);
     $content .= '<p>Profesional: ' . $nombreProfesional . '</p>';
     // Obtener y mostrar el total de pacientes para el profesional específico
-    $totalPacientesProfesional = obtenerTotalPacientesParaProfesional($profesional);
+    $totalPacientesProfesional = count($pacientes);
     $content .= '<p>Total de Pacientes: ' . $totalPacientesProfesional . '</p>';
 }
 else{
     // Si no hay filtro por profesional, obtener y mostrar el total de todos los pacientes
-    $totalPacientes = obtenerTotalPacientes();
+    $totalPacientes = count($pacientes);
     $content .= '<p>Total de Pacientes: ' . $totalPacientes . '</p>';
 }
 

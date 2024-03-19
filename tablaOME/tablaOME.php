@@ -22,8 +22,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     actualizarEstadoCargado($cod_paci, $nuevo_estado);
 }
 
-// Obtener el total de todos los pacientes
-$totalPacientes = obtenerTotalPacientes();
+// Obtener pacientes con filtros aplicados
+$pacientes = obtenerPacientesConFiltro($fecha_desde, $fecha_hasta, $profesional);
+
+// Calcular el total de pacientes después de aplicar el filtro de fechas
+$totalPacientes = count($pacientes);
+
 
 ?>
 
@@ -136,12 +140,6 @@ $totalPacientes = obtenerTotalPacientes();
             <?php echo $totalPacientes; ?>
         </p>
 
-        <?php if (!empty ($profesional)): ?>
-            <p class="mb-4">Total de pacientes para
-                <?php echo obtenerNombreProfesional($profesional); ?>:
-                <?php echo obtenerTotalPacientesParaProfesional($profesional); ?>
-            </p>
-        <?php endif; ?>
         <div class="overflow-x-auto">
             <table class="table-auto w-full">
                 <thead>
