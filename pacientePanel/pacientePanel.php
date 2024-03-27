@@ -3,7 +3,7 @@ require_once '../controlador/control_paciente.php';
 
 
 // Verificar si el usuario está autenticado
-if (!isset ($_SESSION['usuario'])) {
+if (!isset($_SESSION['usuario'])) {
     header("Location: ../index.php");
     exit; // Asegura que el script se detenga después de redirigir
 }
@@ -63,7 +63,7 @@ if (!isset ($_SESSION['usuario'])) {
 
     <?php
 
-    if (isset ($_SESSION['alert_message'])) {
+    if (isset($_SESSION['alert_message'])) {
         // Muestra el mensaje de alerta
         echo "<script>alert('" . $_SESSION['alert_message'] . "');</script>";
         // Elimina el mensaje de alerta de la sesión para que no se muestre de nuevo
@@ -87,10 +87,17 @@ if (!isset ($_SESSION['usuario'])) {
                     require_once '../controlador/control_paciente.php';
                     // Obtener la lista de profesionales
                     $profesionales = obtenerProfesionales();
+
+                    // Ordenar los profesionales alfabéticamente por apellido
+                    usort($profesionales, function ($a, $b) {
+                        return strcmp($a['apellido'], $b['apellido']);
+                    });
+
                     // Mostrar los profesionales ordenados
                     foreach ($profesionales as $profesional) {
                         echo "<option value='" . $profesional['cod_prof'] . "'>" . $profesional['apellido'] . " " . $profesional['nombre'] . "</option>";
                     }
+                    ?>
                     ?>
                 </select>
             </div>
