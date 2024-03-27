@@ -85,21 +85,27 @@ function obtenerPacientesConFiltro($fecha_desde, $fecha_hasta, $profesional)
 
     // Verificar si se encontraron pacientes
     if ($result->num_rows > 0) {
-        // Inicializar un array para almacenar los pacientes
-        $pacientes = array();
+        // Inicializar arrays para almacenar pacientes cargados y no cargados
+        $pacientes_cargados = array();
+        $pacientes_no_cargados = array();
 
-        // Iterar sobre los resultados y almacenarlos en el array
+        // Iterar sobre los resultados y clasificarlos según su estado de carga
         while ($row = $result->fetch_assoc()) {
-            $pacientes[] = $row;
+            if ($row['cargado'] == 'cargado') {
+                $pacientes_cargados[] = $row;
+            } else {
+                $pacientes_no_cargados[] = $row;
+            }
         }
 
-        // Devolver el array de pacientes
-        return $pacientes;
+        // Combinar los arrays y devolverlos
+        return array_merge($pacientes_no_cargados, $pacientes_cargados);
     } else {
         // Devolver un array vacío si no se encontraron pacientes
         return array();
     }
 }
+
 
 function obtenerTotalPacientesParaProfesional($profesional)
 {
