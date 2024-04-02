@@ -220,10 +220,13 @@ if (!isset($_SESSION['usuario'])) {
 
 
 
+            // Función para editar un paciente
+            function editarPaciente(cod_paci) {
+                // Aquí puedes implementar la lógica para editar el paciente con el ID cod_paci
+                // Por ejemplo, puedes redirigir a una página de edición con el ID del paciente en la URL
+                window.location.href = 'editarPaciente.php?editar=' + cod_paci;
+            }
 
-
-            // Función para mostrar los pacientes en una tabla
-            // Función para mostrar los pacientes en una tabla
             function mostrarPacientes(pacientes) {
                 var contenedorPacientes = document.getElementById('contenedorPacientes');
                 contenedorPacientes.innerHTML = ''; // Limpiar cualquier contenido anterior de pacientes
@@ -238,7 +241,7 @@ if (!isset($_SESSION['usuario'])) {
                 table.classList.add('table'); // Agregar la clase 'table'
                 var thead = document.createElement('thead');
                 var headerRow = document.createElement('tr');
-                headerRow.innerHTML = '<th>Nombre y Apellido</th><th>Beneficio</th><th>Profesional</th><th>Práctica</th><th>Diagnóstico</th><th>Fecha</th>'; // Agregado: Fecha
+                headerRow.innerHTML = '<th>Nombre y Apellido</th><th>Beneficio</th><th>Profesional</th><th>Práctica</th><th>Diagnóstico</th><th>Fecha</th><th>Acciones</th>'; // Agregado: Fecha y Acciones
                 thead.appendChild(headerRow);
                 table.appendChild(thead);
 
@@ -269,13 +272,12 @@ if (!isset($_SESSION['usuario'])) {
 
                                 var fechaFormateada = dia + '/' + mes + '/' + año + ' ' + hora + ':' + minutos + ':' + segundos;
 
-
                                 // Agregar los datos del paciente a la fila de la tabla
-                                row.innerHTML = '<td>' + paciente.nombreYapellido + '</td><td>' + paciente.benef + '</td><td>' + data.nombreProfesional + '</td><td>' + paciente.cod_practica + '</td><td>' + paciente.cod_diag + '</td><td>' + fechaFormateada + '</td>'; // Agregado: Fecha
+                                row.innerHTML = '<td>' + paciente.nombreYapellido + '</td><td>' + paciente.benef + '</td><td>' + data.nombreProfesional + '</td><td>' + paciente.cod_practica + '</td><td>' + paciente.cod_diag + '</td><td>' + fechaFormateada + '</td><td><button onclick="editarPaciente(' + paciente.cod_paci + ')">Editar</button></td>'; // Agregado: Fecha y botón de Editar
                             } else {
                                 console.error('Error al obtener el nombre del profesional:', data.message);
                                 // Si hay un error, mostrar solo los detalles del paciente sin el nombre del profesional
-                                row.innerHTML = '<td>' + paciente.nombreYapellido + '</td><td>' + paciente.benef + '</td><td></td><td>' + paciente.cod_practica + '</td><td>' + paciente.cod_diag + '</td><td>' + paciente.fecha + '</td>'; // Agregado: Fecha
+                                row.innerHTML = '<td>' + paciente.nombreYapellido + '</td><td>' + paciente.benef + '</td><td></td><td>' + paciente.cod_practica + '</td><td>' + paciente.cod_diag + '</td><td>' + paciente.fecha + '</td><td><button onclick="editarPaciente(' + paciente.cod_paci + ')">Editar</button></td>'; // Agregado: Fecha y botón de Editar
                             }
                             // Agregar la fila a la tabla
                             tbody.appendChild(row);
@@ -283,7 +285,7 @@ if (!isset($_SESSION['usuario'])) {
                         .catch(error => {
                             console.error('Error:', error);
                             // Si hay un error, mostrar solo los detalles del paciente sin el nombre del profesional
-                            row.innerHTML = '<td>' + paciente.nombreYapellido + '</td><td>' + paciente.benef + '</td><td></td><td>' + paciente.cod_practica + '</td><td>' + paciente.cod_diag + '</td><td>' + paciente.fecha + '</td>'; // Agregado: Fecha
+                            row.innerHTML = '<td>' + paciente.nombreYapellido + '</td><td>' + paciente.benef + '</td><td></td><td>' + paciente.cod_practica + '</td><td>' + paciente.cod_diag + '</td><td>' + paciente.fecha + '</td><td><button onclick="editarPaciente(' + paciente.cod_paci + ')">Editar</button></td>'; // Agregado: Fecha y botón de Editar
                             // Agregar la fila a la tabla
                             tbody.appendChild(row);
                         });
@@ -292,6 +294,7 @@ if (!isset($_SESSION['usuario'])) {
                 table.appendChild(tbody);
                 contenedorPacientes.appendChild(table);
             }
+
 
 
             // Agrega un event listener para detectar cambios en el elemento select con id cod_prof
