@@ -5,11 +5,13 @@ require_once('../tcpdf/tcpdf.php');
 // Incluir el controlador de pacientes
 require_once '../controlador/control_paciente.php';
 
-// Obtener el ID del profesional desde la solicitud GET
-$profesional = isset($_GET['profesional']) ? $_GET['profesional'] : '';
+// Obtener los parámetros de filtro de la URL
+$fecha_desde = isset ($_GET['fecha_desde']) ? $_GET['fecha_desde'] : '';
+$fecha_hasta = isset ($_GET['fecha_hasta']) ? $_GET['fecha_hasta'] : '';
+$profesional = isset ($_GET['profesional']) ? $_GET['profesional'] : '';
 
-// Obtener pacientes del profesional
-$pacientes = obtenerPacientesPorProfesional($profesional);
+// Obtener pacientes con filtros
+$pacientes = obtenerPacientesConFiltro($fecha_desde, $fecha_hasta, $profesional);
 
 // Crear un nuevo documento PDF
 $pdf = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);

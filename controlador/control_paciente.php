@@ -458,4 +458,48 @@ function obtenerDiagnosticoConDescripcion()
     }
 }
 
+
+// Procesar la solicitud de buscar por nombre y apellido
+if (isset($_GET['buscarPorNombreApellido']) && isset($_GET['nombreYapellido'])) {
+    $nombreYapellido = $_GET['nombreYapellido'];
+    $beneficio = obtenerBeneficioPorNombreYApellido($nombreYapellido);
+    if ($beneficio) {
+        echo json_encode(array('success' => true, 'beneficio' => $beneficio));
+    } else {
+        echo json_encode(array('success' => false, 'message' => 'Beneficio no encontrado'));
+    }
+    exit();
+}
+
+function obtenerBeneficioPorNombreYApellido($nombreYapellido)
+{
+    global $conn;
+
+    // Preparar la consulta SQL
+    $sql = "SELECT benef FROM padron WHERE nombreYapellido = ?";
+
+    // Preparar la sentencia
+    $stmt = $conn->prepare($sql);
+
+    // Vincular el parámetro
+    $stmt->bind_param("s", $nombreYapellido);
+
+    // Ejecutar la consulta
+    $stmt->execute();
+
+    // Obtener el resultado
+    $result = $stmt->get_result();
+
+    // Verificar si se encontró el beneficio
+    if ($result->num_rows > 0) {
+        // Obtener el beneficio
+        $row = $result->fetch_assoc();
+        return $row['benef'];
+    } else {
+        // Devolver false si no se encontró el beneficio
+        return false;
+    }
+}
+
+
 ?>

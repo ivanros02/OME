@@ -8,6 +8,8 @@ if (!isset($_SESSION['usuario'])) {
     exit; // Asegura que el script se detenga después de redirigir
 }
 
+
+
 ?>
 
 <!DOCTYPE html>
@@ -111,12 +113,24 @@ if (!isset($_SESSION['usuario'])) {
                     class="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded">
                     Verificar
                 </button>
+
+                <a href="https://prestadores.pami.org.ar/result.php?c=6-2&vm=2" target="_blank"
+                    class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded inline-flex items-center ml-2">
+                    Buscar beneficio por DNI
+                </a>
+
+
             </div>
 
-            <div class="mb-4">
-                <label for="nombreYapellido" class="block text-sm font-medium text-gray-700">Nombre y Apellido:</label>
+            <div class="mb-4 flex items-center">
+                <label for="nombreYapellido" class="block text-sm font-medium text-gray-700 mr-2">Nombre y
+                    Apellido:</label>
                 <input type="text" id="nombreYapellido" name="nombreYapellido" required
-                    class="mt-1 p-2 block w-full border border-gray-300 rounded-md focus:outline-none focus:border-blue-500">
+                    class="mt-1 p-2 block w-1/2 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500 mr-2">
+                <button type="button" id="buscarPorNombreApellido"
+                    class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded">
+                    Buscar
+                </button>
             </div>
 
             <div class="mb-4">
@@ -162,7 +176,6 @@ if (!isset($_SESSION['usuario'])) {
             Generar PDF
         </button>
 
-
         <div id="contenedorPacientes"></div>
         <!-- Aquí va el script de JavaScript -->
         <script>
@@ -193,9 +206,6 @@ if (!isset($_SESSION['usuario'])) {
                 // Redireccionar a la URL para generar el PDF
                 window.location.href = url;
             }
-
-
-
 
             // Dentro de tu función cargarPacientesPorProfesional en tu archivo HTML
             function cargarPacientesPorProfesional(cod_prof) {
@@ -335,6 +345,28 @@ if (!isset($_SESSION['usuario'])) {
                     alert('Por favor ingrese un número de beneficio.');
                 }
             });
+
+            document.getElementById('buscarPorNombreApellido').addEventListener('click', function () {
+                var nombreYapellido = document.getElementById('nombreYapellido').value;
+                if (nombreYapellido.trim() !== '') {
+                    fetch('../controlador/control_paciente.php?buscarPorNombreApellido&nombreYapellido=' + nombreYapellido)
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.success) {
+                                document.getElementById('benef').value = data.beneficio;
+                                document.getElementById('btnAgregar').disabled = false;
+                            } else {
+                                alert(data.message);
+                                document.getElementById('benef').value = '';
+                                document.getElementById('btnAgregar').disabled = false; // Limpiar el campo si no se encuentra el beneficio
+                            }
+                        })
+                        .catch(error => console.error('Error:', error));
+                } else {
+                    alert('Por favor ingrese un nombre y apellido.');
+                }
+            });
+
 
 
 
