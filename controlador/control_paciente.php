@@ -9,13 +9,14 @@ if (session_status() == PHP_SESSION_NONE) {
 if (isset($_POST['agregar'])) {
     $nombreYapellido = $_POST['nombreYapellido'];
     $benef = $_POST['benef'];
+    $dni = $_POST['dni']; // Obtener el dni del formulario
     $cod_prof = $_POST['cod_prof'];
     $cod_practica = $_POST['cod_practica'];
     $fecha = $_POST['fecha'];
     $cod_diag = $_POST['cod_diag']; // Obtener el código de diagnóstico del formulario
 
-    // Llama a la función agregarPaciente con los argumentos necesarios, incluido $cod_diag
-    if (agregarPaciente($nombreYapellido, $benef, $cod_prof, $cod_practica, $cod_diag, $fecha)) {
+    // Llama a la función agregarPaciente con los argumentos necesarios, incluido $dni y $cod_diag
+    if (agregarPaciente($nombreYapellido, $benef, $dni, $cod_prof, $cod_practica, $cod_diag, $fecha)) {
         $_SESSION['alert_message'] = "Paciente agregado correctamente";
     } else {
         $_SESSION['alert_message'] = "Error al agregar el paciente";
@@ -25,6 +26,7 @@ if (isset($_POST['agregar'])) {
     header("Location: ../pacientePanel/pacientePanel.php");
     exit(); // Asegura que el script se detenga después de la redirección
 }
+
 
 
 
@@ -201,6 +203,54 @@ if (isset($_GET['verificarBeneficio']) && isset($_GET['benef'])) {
     exit();
 }
 
+function obtenerNombreYApellidoPorDNI($dni)
+{
+    global $conn;
+
+    // Preparar la consulta SQL
+    $sql = "SELECT nombreYapellido, benef FROM padron WHERE dni = ?";
+
+    // Preparar la sentencia
+    $stmt = $conn->prepare($sql);
+
+    // Vincular el parámetro
+    $stmt->bind_param("i", $dni);
+
+    // Ejecutar la consulta
+    $stmt->execute();
+
+    // Obtener el resultado
+    $result = $stmt->get_result();
+
+    // Verificar si se encontró el nombre y apellido
+    if ($result->num_rows > 0) {
+        // Devolver el nombre, apellido y beneficio
+        $row = $result->fetch_assoc();
+        return array(
+            'nombreYapellido' => $row['nombreYapellido'],
+            'benef' => $row['benef']
+        );
+    } else {
+        // Devolver false si no se encontró el nombre y apellido
+        return false;
+    }
+}
+
+if (isset($_GET['verificarDni']) && isset($_GET['dni'])) {
+    $dni = $_GET['dni'];
+
+    // Obtener nombre, apellido y beneficio por DNI
+    $datos = obtenerNombreYApellidoPorDNI($dni);
+
+    if ($datos) {
+        echo json_encode(array('success' => true, 'nombreYapellido' => $datos['nombreYapellido'], 'benef' => $datos['benef']));
+    } else {
+        // Si el DNI no existe en el padron, devolver un mensaje indicando que no se encontró
+        echo json_encode(array('success' => false, 'message' => 'Completar nombre y apellido'));
+    }
+}
+
+
 
 
 
@@ -265,7 +315,8 @@ function actualizarEstadoCargado($cod_paci, $nuevo_estado)
 
 
 // Función para obtener los pacientes de un profesional específico
-function obtenerPacientesPorProfesional($cod_prof) {
+function obtenerPacientesPorProfesional($cod_prof)
+{
     global $conn;
 
     // Preparar la consulta SQL para obtener los pacientes del profesional
@@ -349,7 +400,7 @@ function obtenerEspecialidadProfesional($cod_prof)
     }
 }
 
-function obtenerDescripcionPractica($cod_practica )
+function obtenerDescripcionPractica($cod_practica)
 {
     global $conn;
     $sql = "SELECT descript FROM tipo_prac WHERE cod_practica  = ?";
@@ -357,7 +408,7 @@ function obtenerDescripcionPractica($cod_practica )
     // Preparar la sentencia
     $stmt = $conn->prepare($sql);
     // Vincular parámetro
-    $stmt->bind_param("i", $cod_practica );
+    $stmt->bind_param("i", $cod_practica);
     // Ejecutar consulta
     $stmt->execute();
     // Obtener resultado

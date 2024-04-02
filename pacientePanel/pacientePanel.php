@@ -113,14 +113,18 @@ if (!isset($_SESSION['usuario'])) {
                     class="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded">
                     Verificar
                 </button>
-
-                <a href="https://prestadores.pami.org.ar/result.php?c=6-2&vm=2" target="_blank"
-                    class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded inline-flex items-center ml-2">
-                    Buscar beneficio por DNI
-                </a>
-
-
             </div>
+
+            <div class="mb-4 flex items-center">
+                <label for="dni" class="block text-sm font-medium text-gray-700 mr-2">DNI:</label>
+                <input type="text" id="dni" name="dni" required
+                    class="mt-1 p-2 block w-1/2 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500 mr-2">
+                <button type="button" id="verificarDni"
+                    class="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded">
+                    Verificar
+                </button>
+            </div>
+
 
             <div class="mb-4 flex items-center">
                 <label for="nombreYapellido" class="block text-sm font-medium text-gray-700 mr-2">Nombre y
@@ -345,6 +349,40 @@ if (!isset($_SESSION['usuario'])) {
                     alert('Por favor ingrese un número de beneficio.');
                 }
             });
+
+            // Definir una función para verificar el DNI
+            function verificarDNI() {
+                var dni = document.getElementById('dni').value;
+                if (dni.trim() !== '') {
+                    // Realizar la verificación del DNI
+                    fetch('../controlador/control_paciente.php?verificarDni&dni=' + dni)
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.success) {
+                                document.getElementById('nombreYapellido').value = data.nombreYapellido;
+                                document.getElementById('benef').value = data.benef;
+                                document.getElementById('btnAgregar').disabled = false;
+                            } else {
+                                if (data.completar) {
+                                    alert('Completar número de DNI.');
+                                } else {
+                                    alert(data.message);
+                                }
+                                document.getElementById('nombreYapellido').value = ''; // Limpiar el campo si el DNI no existe
+                                document.getElementById('benef').value = ''; // Limpiar el campo si el DNI no existe
+                                document.getElementById('btnAgregar').disabled = true; // Deshabilitar el botón si el DNI no existe
+                            }
+                        })
+                        .catch(error => console.error('Error:', error));
+                } else {
+                    alert('Por favor ingrese un número de DNI.');
+                }
+            }
+
+            // Agregar un event listener al botón para verificar el DNI
+            document.getElementById('verificarDni').addEventListener('click', verificarDNI);
+
+
 
             document.getElementById('buscarPorNombreApellido').addEventListener('click', function () {
                 var nombreYapellido = document.getElementById('nombreYapellido').value;
