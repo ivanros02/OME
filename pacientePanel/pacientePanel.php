@@ -186,7 +186,21 @@ if (!isset($_SESSION['usuario'])) {
         <!-- Aquí va el script de JavaScript -->
         <script>
 
-            
+            // Capturar el campo de entrada del número de beneficio
+            const beneficioInput = document.getElementById('benef');
+            // Capturar el botón de agregar
+            const btnAgregar = document.getElementById('btnAgregar');
+
+            // Agregar un event listener para el evento blur (cuando el campo pierde el foco)
+            beneficioInput.addEventListener('blur', function () {
+                // Verificar si el campo de entrada contiene menos de 14 caracteres
+                if (beneficioInput.value.trim().length < 14) {
+                    // Si contiene menos de 14 caracteres, deshabilitar el botón de agregar
+                    btnAgregar.setAttribute('disabled', 'disabled');
+                }
+            });
+
+
 
             //funcion para maximo de beneficio:
             document.getElementById("benef").addEventListener("input", function () {
