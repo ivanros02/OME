@@ -163,7 +163,7 @@ function obtenerNombreYApellidoPorBeneficio($beneficio)
     global $conn;
 
     // Preparar la consulta SQL
-    $sql = "SELECT nombreYapellido FROM padron WHERE benef = ?";
+    $sql = "SELECT nombreYapellido,dni FROM padron WHERE benef = ?";
 
     // Preparar la sentencia
     $stmt = $conn->prepare($sql);
@@ -181,7 +181,10 @@ function obtenerNombreYApellidoPorBeneficio($beneficio)
     if ($result->num_rows > 0) {
         // Devolver el nombre y apellido
         $row = $result->fetch_assoc();
-        return $row['nombreYapellido'];
+        return array(
+            'nombreYapellido' => $row['nombreYapellido'],
+            'dni' => $row['dni']
+        );
     } else {
         // Devolver false si no se encontró el nombre y apellido
         return false;
@@ -191,10 +194,10 @@ function obtenerNombreYApellidoPorBeneficio($beneficio)
 // Procesar la solicitud de verificación del número de beneficio
 if (isset($_GET['verificarBeneficio']) && isset($_GET['benef'])) {
     $beneficio = $_GET['benef'];
-    $nombreYapellido = obtenerNombreYApellidoPorBeneficio($beneficio);
+    $datos = obtenerNombreYApellidoPorBeneficio($beneficio);
     $completar = 'Completar con nombre y apellido';
-    if ($nombreYapellido) {
-        echo json_encode(array('success' => true, 'nombreYapellido' => $nombreYapellido));
+    if ($datos) {
+        echo json_encode(array('success' => true, 'nombreYapellido' => $datos['nombreYapellido'], 'dni' => $datos['dni']));
     } else {
         // Si no se reciben los parámetros esperados, devolver un mensaje de error
         echo json_encode(array('success' => false, 'message' => 'Completar nombre y apellido'));
@@ -513,9 +516,9 @@ function obtenerDiagnosticoConDescripcion()
 // Procesar la solicitud de buscar por nombre y apellido
 if (isset($_GET['buscarPorNombreApellido']) && isset($_GET['nombreYapellido'])) {
     $nombreYapellido = $_GET['nombreYapellido'];
-    $beneficio = obtenerBeneficioPorNombreYApellido($nombreYapellido);
-    if ($beneficio) {
-        echo json_encode(array('success' => true, 'beneficio' => $beneficio));
+    $datos = obtenerBeneficioPorNombreYApellido($nombreYapellido);
+    if ($datos) {
+        echo json_encode(array('success' => true, 'benef' => $datos['benef'],'dni' => $datos['dni'] ));
     } else {
         echo json_encode(array('success' => false, 'message' => 'Beneficio no encontrado'));
     }
@@ -527,7 +530,7 @@ function obtenerBeneficioPorNombreYApellido($nombreYapellido)
     global $conn;
 
     // Preparar la consulta SQL
-    $sql = "SELECT benef FROM padron WHERE nombreYapellido = ?";
+    $sql = "SELECT benef,dni FROM padron WHERE nombreYapellido = ?";
 
     // Preparar la sentencia
     $stmt = $conn->prepare($sql);
@@ -545,7 +548,10 @@ function obtenerBeneficioPorNombreYApellido($nombreYapellido)
     if ($result->num_rows > 0) {
         // Obtener el beneficio
         $row = $result->fetch_assoc();
-        return $row['benef'];
+        return array(
+            'benef' => $row['benef'],
+            'dni' => $row['dni']
+        );
     } else {
         // Devolver false si no se encontró el beneficio
         return false;

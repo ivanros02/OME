@@ -126,6 +126,8 @@ if (!isset($_SESSION['usuario'])) {
             </div>
 
 
+
+
             <div class="mb-4 flex items-center">
                 <label for="nombreYapellido" class="block text-sm font-medium text-gray-700 mr-2">Nombre y
                     Apellido:</label>
@@ -183,6 +185,8 @@ if (!isset($_SESSION['usuario'])) {
         <div id="contenedorPacientes"></div>
         <!-- Aquí va el script de JavaScript -->
         <script>
+
+            
 
             //funcion para maximo de beneficio:
             document.getElementById("benef").addEventListener("input", function () {
@@ -333,6 +337,7 @@ if (!isset($_SESSION['usuario'])) {
                         .then(data => {
                             if (data.success) {
                                 document.getElementById('nombreYapellido').value = data.nombreYapellido;
+                                document.getElementById('dni').value = data.dni;
                                 document.getElementById('btnAgregar').disabled = false;
                             } else {
                                 if (data.completar) {
@@ -391,7 +396,8 @@ if (!isset($_SESSION['usuario'])) {
                         .then(response => response.json())
                         .then(data => {
                             if (data.success) {
-                                document.getElementById('benef').value = data.beneficio;
+                                document.getElementById('benef').value = data.benef;
+                                document.getElementById('dni').value = data.dni;
                                 document.getElementById('btnAgregar').disabled = false;
                             } else {
                                 alert(data.message);
