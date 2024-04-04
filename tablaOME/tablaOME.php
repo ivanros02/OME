@@ -148,7 +148,7 @@ $totalPacientes = count($pacientes);
                         <th class="px-4 py-2">Beneficio</th>
                         <th class="px-4 py-2">Profesional</th>
                         <th class="px-4 py-2">Especialidad</th>
-                        <th class="px-4 py-2">Código de Práctica</th>
+                        <th class="px-4 py-2">Diagnostico</th>
                         <th class="px-4 py-2">Fecha</th>
                         <th class="px-4 py-2">Cargado</th>
                     </tr>
@@ -163,7 +163,7 @@ $totalPacientes = count($pacientes);
                         echo "<td class='border px-4 py-2'>" . $paciente["benef"] . "</td>";
                         echo "<td class='border px-4 py-2'>" . obtenerNombreProfesional($paciente["cod_prof"]) . "</td>";
                         echo "<td class='border px-4 py-2'>" . obtenerEspecialidadProfesional($paciente["cod_prof"]) . "</td>";
-                        echo "<td class='border px-4 py-2'>" . obtenerDescripcionPractica($paciente["cod_practica"]) . "</td>";
+                        echo "<td class='border px-4 py-2'>" . $paciente["cod_diag"] . "</td>";
                         echo "<td class='border px-4 py-2'>" . date('d/m/Y H:i:s', strtotime($paciente["fecha"])) . "</td>";
                         echo "<td class='border px-4 py-2'>";
                         // Formulario para cambiar el estado 'cargado'

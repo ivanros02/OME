@@ -145,13 +145,18 @@ if (!isset($_SESSION['usuario'])) {
                     class="mt-1 p-2 block w-full border border-gray-300 rounded-md focus:outline-none focus:border-blue-500">
                     <option value="">Seleccionar Código de Práctica</option>
                     <?php
+                    // Obtener códigos de práctica y descripciones
                     $codigos_practica = obtenerCodigosPractica();
                     foreach ($codigos_practica as $cod_practica) {
-                        echo "<option value='" . $cod_practica . "'>" . $cod_practica . "</option>";
+                        // Obtener la descripción para el código de práctica actual
+                        $descripcion = obtenerDescripcionPractica($cod_practica);
+                        // Imprimir opción con código de práctica y descripción
+                        echo "<option value='" . $cod_practica . "'>" . $cod_practica . " - " . $descripcion . "</option>";
                     }
                     ?>
                 </select>
             </div>
+
 
             <div class="mb-4">
                 <label for="cod_diag" class="block text-sm font-medium text-gray-700">Diagnóstico:</label>
