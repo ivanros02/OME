@@ -60,8 +60,7 @@ if (isset($_GET['eliminar'])) {
 }
 
 // Función para obtener pacientes con filtros aplicados
-function obtenerPacientesConFiltro($fecha_desde, $fecha_hasta, $profesional)
-{
+function obtenerPacientesConFiltro($fecha_desde, $fecha_hasta, $profesional) {
     global $conn;
 
     // Preparar la consulta SQL base para obtener pacientes
@@ -82,31 +81,30 @@ function obtenerPacientesConFiltro($fecha_desde, $fecha_hasta, $profesional)
         $sql .= " AND cod_prof = $profesional";
     }
 
+    // Ordenar por estado de carga y luego por cod_prof
+    $sql .= " ORDER BY cargado DESC, cod_prof ASC";
+
     // Ejecutar la consulta
     $result = $conn->query($sql);
 
     // Verificar si se encontraron pacientes
     if ($result->num_rows > 0) {
-        // Inicializar arrays para almacenar pacientes cargados y no cargados
-        $pacientes_cargados = array();
-        $pacientes_no_cargados = array();
+        // Inicializar array para almacenar pacientes
+        $pacientes = array();
 
-        // Iterar sobre los resultados y clasificarlos según su estado de carga
+        // Iterar sobre los resultados y almacenarlos en el array
         while ($row = $result->fetch_assoc()) {
-            if ($row['cargado'] == 'cargado') {
-                $pacientes_cargados[] = $row;
-            } else {
-                $pacientes_no_cargados[] = $row;
-            }
+            $pacientes[] = $row;
         }
 
-        // Combinar los arrays y devolverlos
-        return array_merge($pacientes_no_cargados, $pacientes_cargados);
+        // Devolver array de pacientes
+        return $pacientes;
     } else {
         // Devolver un array vacío si no se encontraron pacientes
         return array();
     }
 }
+
 
 
 function obtenerTotalPacientesParaProfesional($profesional)
