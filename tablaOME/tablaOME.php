@@ -151,6 +151,7 @@ $totalPacientes = count($pacientes);
                         <th class="px-4 py-2">Diagnostico</th>
                         <th class="px-4 py-2">Fecha</th>
                         <th class="px-4 py-2">Cargado</th>
+                        <th class="px-4 py-2">QR</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -175,6 +176,16 @@ $totalPacientes = count($pacientes);
                         echo "</select>";
                         echo "</form>";
                         echo "</td>";
+                       
+
+                        // Botón para generar QR
+                        echo "<td class='border px-4 py-2'>";
+                        echo "<form method='post' action='qr.php' target='_blank'> ";
+                        echo "<input type='hidden' name='beneficio' value='" . $paciente["benef"] . "'>"; // Pasar el número de beneficio como un campo oculto
+                        echo "<button type='submit'>Generar QR</button>";
+                        echo "</form>";
+                        echo "</td>";
+
                         echo "</tr>";
                     }
 
