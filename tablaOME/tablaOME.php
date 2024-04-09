@@ -76,8 +76,7 @@ $totalPacientes = count($pacientes);
             <a href="generar_reporte_pdf.php?fecha_desde=<?php echo $fecha_desde; ?>&fecha_hasta=<?php echo $fecha_hasta; ?>&profesional=<?php echo $profesional; ?>"
                 class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Exportar a PDF</a>
         </div>
-
-
+        
         <!-- Formulario de filtro -->
         <form method="GET" class="mb-8">
             <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">

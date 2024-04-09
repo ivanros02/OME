@@ -394,7 +394,7 @@ if (!isset($_SESSION['usuario'])) {
                                 }
                                 document.getElementById('nombreYapellido').value = ''; // Limpiar el campo si el DNI no existe
                                 document.getElementById('benef').value = ''; // Limpiar el campo si el DNI no existe
-                                document.getElementById('btnAgregar').disabled = true; // Deshabilitar el botón si el DNI no existe
+                                document.getElementById('btnAgregar').disabled = false; // Deshabilitar el botón si el DNI no existe
                             }
                         })
                         .catch(error => console.error('Error:', error));

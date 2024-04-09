@@ -26,6 +26,7 @@ $sheet->setCellValue('D1', 'Especialidad de Profesional');
 $sheet->setCellValue('E1', 'Código de Práctica');
 $sheet->setCellValue('F1', 'Fecha');
 $sheet->setCellValue('G1', 'Código de Diagnóstico');
+$sheet->setCellValue('H1', 'Estado');
 
 
 // Obtener datos filtrados de la base de datos
@@ -43,6 +44,7 @@ foreach ($pacientes as $paciente) {
     $sheet->setCellValue('E' . $row, $paciente["cod_practica"]);
     $sheet->setCellValue('F' . $row, date('d/m/Y H:i:s', strtotime($paciente["fecha"])));
     $sheet->setCellValue('G' . $row, $paciente["cod_diag"]);
+    $sheet->setCellValue('H' . $row, $paciente["cargado"]);
     $row++;
 }
 
