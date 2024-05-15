@@ -9,7 +9,6 @@ if (!isset($_SESSION['usuario'])) {
 }
 
 
-
 ?>
 
 <!DOCTYPE html>
@@ -105,38 +104,30 @@ if (!isset($_SESSION['usuario'])) {
             </div>
 
 
-            <div class="mb-4 flex items-center">
-                <label for="benef" class="block text-sm font-medium text-gray-700 mr-2">Beneficio:</label>
-                <input type="text" id="benef" name="benef" required
-                    class="mt-1 p-2 block w-1/2 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500 mr-2">
-                <button type="button" id="verificarBeneficio"
-                    class="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded">
-                    Verificar
+            <div id="buscarContainer">
+                <div class="mb-4 flex items-center">
+                    <label for="benef" class="block text-sm font-medium text-gray-700 mr-2">Beneficio:</label>
+                    <input type="text" id="benef" name="benef" required maxlength="12"
+                        class="mt-1 p-2 block w-1/2 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500 mr-2">
+                </div>
+
+                <div class="mb-4 flex items-center">
+                    <label for="parentesco" class="block text-sm font-medium text-gray-700 mr-2">Parentesco:</label>
+                    <input type="text" id="parentesco" name="parent" required maxlength="2"
+                        class="mt-1 p-2 block w-1/2 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500 mr-2">
+                </div>
+
+                <button type="button" name="buscar" id="btnBuscar"
+                    class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded">
+                    Buscar
                 </button>
             </div>
-
-            <div class="mb-4 flex items-center">
-                <label for="dni" class="block text-sm font-medium text-gray-700 mr-2">DNI:</label>
-                <input type="text" id="dni" name="dni" required
-                    class="mt-1 p-2 block w-1/2 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500 mr-2">
-                <button type="button" id="verificarDni"
-                    class="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded">
-                    Verificar
-                </button>
-            </div>
-
-
-
 
             <div class="mb-4 flex items-center">
                 <label for="nombreYapellido" class="block text-sm font-medium text-gray-700 mr-2">Nombre y
                     Apellido:</label>
-                <input type="text" id="nombreYapellido" name="nombreYapellido" required
+                <input type="text" id="nombreYapellido" name="nombreYapellido" readonly
                     class="mt-1 p-2 block w-1/2 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500 mr-2">
-                <button type="button" id="buscarPorNombreApellido"
-                    class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded">
-                    Buscar
-                </button>
             </div>
 
             <div class="mb-4">
@@ -173,11 +164,13 @@ if (!isset($_SESSION['usuario'])) {
             </div>
             <div class="mb-4">
                 <label for="fecha" class="block text-sm font-medium text-gray-700">Fecha y Hora:</label>
-                <input type="datetime-local" id="fecha" name="fecha" required
+                <input type="datetime-local" id="fecha" name="fecha" required readonly
                     class="mt-1 p-2 block w-full border border-gray-300 rounded-md focus:outline-none focus:border-blue-500">
             </div>
+
+
             <button type="submit" name="agregar" id="btnAgregar"
-                class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded" disabled>
+                class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded" >
                 Agregar
             </button>
 
@@ -187,35 +180,71 @@ if (!isset($_SESSION['usuario'])) {
             Generar PDF
         </button>
 
+        <div class="mb-4">
+            <label for="fecha_desde" class="block text-sm font-medium text-gray-700">Fecha de inicio:</label>
+            <input type="date" id="fecha_desde" name="fecha_desde"
+                class="mt-1 p-2 block w-full border border-gray-300 rounded-md focus:outline-none focus:border-blue-500">
+        </div>
+
+        <div class="mb-4">
+            <label for="fecha_hasta" class="block text-sm font-medium text-gray-700">Fecha de fin:</label>
+            <input type="date" id="fecha_hasta" name="fecha_hasta"
+                class="mt-1 p-2 block w-full border border-gray-300 rounded-md focus:outline-none focus:border-blue-500">
+        </div>
+
         <div id="contenedorPacientes"></div>
         <!-- Aquí va el script de JavaScript -->
+        <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/cheerio"></script>
         <script>
 
-            // Capturar el campo de entrada del número de beneficio
-            const beneficioInput = document.getElementById('benef');
-            // Capturar el botón de agregar
-            const btnAgregar = document.getElementById('btnAgregar');
 
-            // Agregar un event listener para el evento blur (cuando el campo pierde el foco)
-            beneficioInput.addEventListener('blur', function () {
-                // Verificar si el campo de entrada contiene menos de 14 caracteres
-                if (beneficioInput.value.trim().length < 14) {
-                    // Si contiene menos de 14 caracteres, deshabilitar el botón de agregar
-                    btnAgregar.setAttribute('disabled', 'disabled');
-                }
+            document.getElementById('btnBuscar').addEventListener('click', function () {
+                // Obtener los valores de los campos de "Beneficio" y "Parentesco"
+                var beneficio = $('#benef').val();
+                var parentesco = $('#parentesco').val();
+
+                // Realizar la solicitud al backend
+                fetch(`https://worldsoftsystems.com.ar/buscar?beneficio=${beneficio}&parentesco=${parentesco}`, {
+                    method: "GET",
+                    headers: {
+                        "Content-Type": "application/json"
+                    }
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        // Verificar si se encontró el nombre y apellido
+                        if (data.resultado) {
+                            // Actualizar el campo de nombre y apellido con el resultado
+                            $('#nombreYapellido').val(data.resultado);
+                        } else {
+                            // Mostrar una alerta si no se encuentra el resultado
+                            alert("No se encontró ningún beneficiario con los datos proporcionados.");
+                        }
+                    })
+                    .catch (error => {
+                            console.error(error);
+                            // Muestra un mensaje de error si ocurre un error durante la solicitud
+                            alert("Error al buscar el nombre y apellido.");
+                        });
             });
 
 
+            // Obtener el campo de fecha y hora por su ID
+            var fechaInput = document.getElementById('fecha');
 
-            //funcion para maximo de beneficio:
-            document.getElementById("benef").addEventListener("input", function () {
-                var input = this.value.trim();
-                // Eliminar caracteres no numéricos
-                input = input.replace(/\D/g, '');
-                // Limitar a 14 caracteres
-                input = input.slice(0, 14);
-                this.value = input;
-            });
+            // Obtener la fecha y hora actual en formato local (hora de Argentina)
+            var fechaActual = new Date();
+            var offset = -3; // UTC -3 horas para Argentina
+            fechaActual.setHours(fechaActual.getHours() + offset);
+
+            // Formatear la fecha y hora en el formato deseado (YYYY-MM-DDTHH:MM)
+            var fechaFormateada = fechaActual.toISOString().slice(0, 16);
+
+            // Establecer el valor del campo de fecha y hora al valor actual
+            fechaInput.value = fechaFormateada;
+
 
             document.getElementById('btnGenerarPDF').addEventListener('click', function () {
                 // Llamar a la función para generar el PDF
@@ -226,13 +255,17 @@ if (!isset($_SESSION['usuario'])) {
             function generarPDF() {
                 // Obtener el ID del profesional seleccionado
                 var cod_prof = document.getElementById('cod_prof').value;
+                // Obtener las fechas de inicio y fin
+                var fechaInicio = document.getElementById('fecha_desde').value;
+                var fechaFin = document.getElementById('fecha_hasta').value;
 
-                // Crear la URL para generar el PDF con el ID del profesional como parámetro
-                var url = './generar_pdf.php?profesional=' + cod_prof;
+                // Crear la URL para generar el PDF con los parámetros de fecha y el ID del profesional
+                var url = './generar_pdf.php?profesional=' + cod_prof + '&fecha_desde=' + fechaInicio + '&fecha_hasta=' + fechaFin;
 
                 // Redireccionar a la URL para generar el PDF
                 window.location.href = url;
             }
+
 
             // Dentro de tu función cargarPacientesPorProfesional en tu archivo HTML
             function cargarPacientesPorProfesional(cod_prof) {
@@ -339,99 +372,6 @@ if (!isset($_SESSION['usuario'])) {
                 var cod_prof = this.value; // Obtener el valor seleccionado del profesional
                 cargarPacientesPorProfesional(cod_prof); // Llamar a la función para cargar pacientes por profesional
             });
-
-
-            document.getElementById('verificarBeneficio').addEventListener('click', function () {
-                var beneficio = document.getElementById('benef').value;
-                if (beneficio.trim() !== '') {
-                    // Comprobar la longitud del beneficio ingresado
-                    if (beneficio.trim().length < 14) {
-                        alert('El número de beneficio debe tener al menos 14 caracteres.');
-                        return; // Salir de la función si no se cumplen los requisitos de longitud
-                    }
-
-                    // Realizar la verificación del beneficio si tiene al menos 14 caracteres
-                    fetch('../controlador/control_paciente.php?verificarBeneficio&benef=' + beneficio)
-                        .then(response => response.json())
-                        .then(data => {
-                            if (data.success) {
-                                document.getElementById('nombreYapellido').value = data.nombreYapellido;
-                                document.getElementById('dni').value = data.dni;
-                                document.getElementById('btnAgregar').disabled = false;
-                            } else {
-                                if (data.completar) {
-                                    alert('Completar número de beneficio.');
-                                } else {
-                                    alert(data.message);
-                                }
-                                document.getElementById('nombreYapellido').value = ''; // Limpiar el campo si el beneficio no existe
-                                document.getElementById('btnAgregar').disabled = false; // Deshabilitar el botón si el beneficio no existe
-                            }
-                        })
-                        .catch(error => console.error('Error:', error));
-                } else {
-                    alert('Por favor ingrese un número de beneficio.');
-                }
-            });
-
-            // Definir una función para verificar el DNI
-            function verificarDNI() {
-                var dni = document.getElementById('dni').value;
-                if (dni.trim() !== '') {
-                    // Realizar la verificación del DNI
-                    fetch('../controlador/control_paciente.php?verificarDni&dni=' + dni)
-                        .then(response => response.json())
-                        .then(data => {
-                            if (data.success) {
-                                document.getElementById('nombreYapellido').value = data.nombreYapellido;
-                                document.getElementById('benef').value = data.benef;
-                                document.getElementById('btnAgregar').disabled = false;
-                            } else {
-                                if (data.completar) {
-                                    alert('Completar número de DNI.');
-                                } else {
-                                    alert(data.message);
-                                }
-                                document.getElementById('nombreYapellido').value = ''; // Limpiar el campo si el DNI no existe
-                                document.getElementById('benef').value = ''; // Limpiar el campo si el DNI no existe
-                                document.getElementById('btnAgregar').disabled = false; // Deshabilitar el botón si el DNI no existe
-                            }
-                        })
-                        .catch(error => console.error('Error:', error));
-                } else {
-                    alert('Por favor ingrese un número de DNI.');
-                }
-            }
-
-            // Agregar un event listener al botón para verificar el DNI
-            document.getElementById('verificarDni').addEventListener('click', verificarDNI);
-
-
-
-            document.getElementById('buscarPorNombreApellido').addEventListener('click', function () {
-                var nombreYapellido = document.getElementById('nombreYapellido').value;
-                if (nombreYapellido.trim() !== '') {
-                    fetch('../controlador/control_paciente.php?buscarPorNombreApellido&nombreYapellido=' + nombreYapellido)
-                        .then(response => response.json())
-                        .then(data => {
-                            if (data.success) {
-                                document.getElementById('benef').value = data.benef;
-                                document.getElementById('dni').value = data.dni;
-                                document.getElementById('btnAgregar').disabled = false;
-                            } else {
-                                alert(data.message);
-                                document.getElementById('benef').value = '';
-                                document.getElementById('btnAgregar').disabled = false; // Limpiar el campo si no se encuentra el beneficio
-                            }
-                        })
-                        .catch(error => console.error('Error:', error));
-                } else {
-                    alert('Por favor ingrese un nombre y apellido.');
-                }
-            });
-
-
-
 
 
 

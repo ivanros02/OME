@@ -7,16 +7,24 @@ if (session_status() == PHP_SESSION_NONE) {
 }
 
 if (isset($_POST['agregar'])) {
+     // Verificar si el campo nombreYapellido está vacío
+     if (empty($_POST['nombreYapellido'])) {
+        $_SESSION['alert_message'] = "El campo Nombre y Apellido no puede estar vacío";
+        header("Location: ../pacientePanel/pacientePanel.php");
+        exit(); // Asegura que el script se detenga después de la redirección
+    }
+    
     $nombreYapellido = $_POST['nombreYapellido'];
-    $benef = $_POST['benef'];
-    $dni = $_POST['dni']; // Obtener el dni del formulario
+    // Recibe los valores de 'Beneficio' y 'Parentesco' del formulario
+    $beneficio = $_POST['benef'];
+    $parentesco = $_POST['parent'];
     $cod_prof = $_POST['cod_prof'];
     $cod_practica = $_POST['cod_practica'];
     $fecha = $_POST['fecha'];
     $cod_diag = $_POST['cod_diag']; // Obtener el código de diagnóstico del formulario
 
-    // Llama a la función agregarPaciente con los argumentos necesarios, incluido $dni y $cod_diag
-    if (agregarPaciente($nombreYapellido, $benef, $dni, $cod_prof, $cod_practica, $cod_diag, $fecha)) {
+    // Llama a la función agregarPaciente con los argumentos necesarios, incluido y $cod_diag
+    if (agregarPaciente($nombreYapellido, $beneficio,$parentesco, $cod_prof, $cod_practica, $cod_diag, $fecha)) {
         $_SESSION['alert_message'] = "Paciente agregado correctamente";
     } else {
         $_SESSION['alert_message'] = "Error al agregar el paciente";
@@ -28,39 +36,9 @@ if (isset($_POST['agregar'])) {
 }
 
 
-
-
-// Procesar la solicitud de eliminar un paciente
-if (isset($_GET['eliminar'])) {
-    $cod_paci = $_GET['eliminar'];
-
-    // Si se ha confirmado la eliminación, proceder con la eliminación
-    if (isset($_GET['confirmar'])) {
-        if (eliminarPaciente($cod_paci)) {
-            $_SESSION['alert_message'] = "Paciente eliminado correctamente";
-        } else {
-            $_SESSION['alert_message'] = "Error al eliminar el paciente";
-        }
-
-        // Redirigir después de eliminar para evitar reenvío de formulario
-        header("Location: ../pacientePanel/pacientePanel.php");
-        exit(); // Asegura que el script se detenga después de la redirección
-    } else {
-        // Si no se ha confirmado, mostrar la ventana de confirmación
-        echo "<script>
-                var confirmar = confirm('¿Estás seguro de que quieres eliminar este paciente?');
-                if (confirmar) {
-                    window.location.href = 'pacientePanel.php?eliminar=$cod_paci&confirmar=1';
-                } else {
-                    window.location.href = 'pacientePanel.php';
-                }
-              </script>";
-        exit();
-    }
-}
-
 // Función para obtener pacientes con filtros aplicados
-function obtenerPacientesConFiltro($fecha_desde, $fecha_hasta, $profesional) {
+function obtenerPacientesConFiltro($fecha_desde, $fecha_hasta, $profesional)
+{
     global $conn;
 
     // Preparar la consulta SQL base para obtener pacientes
@@ -189,20 +167,6 @@ function obtenerNombreYApellidoPorBeneficio($beneficio)
     }
 }
 
-// Procesar la solicitud de verificación del número de beneficio
-if (isset($_GET['verificarBeneficio']) && isset($_GET['benef'])) {
-    $beneficio = $_GET['benef'];
-    $datos = obtenerNombreYApellidoPorBeneficio($beneficio);
-    $completar = 'Completar con nombre y apellido';
-    if ($datos) {
-        echo json_encode(array('success' => true, 'nombreYapellido' => $datos['nombreYapellido'], 'dni' => $datos['dni']));
-    } else {
-        // Si no se reciben los parámetros esperados, devolver un mensaje de error
-        echo json_encode(array('success' => false, 'message' => 'Completar nombre y apellido'));
-
-    }
-    exit();
-}
 
 function obtenerNombreYApellidoPorDNI($dni)
 {
@@ -236,22 +200,6 @@ function obtenerNombreYApellidoPorDNI($dni)
         return false;
     }
 }
-
-if (isset($_GET['verificarDni']) && isset($_GET['dni'])) {
-    $dni = $_GET['dni'];
-
-    // Obtener nombre, apellido y beneficio por DNI
-    $datos = obtenerNombreYApellidoPorDNI($dni);
-
-    if ($datos) {
-        echo json_encode(array('success' => true, 'nombreYapellido' => $datos['nombreYapellido'], 'benef' => $datos['benef']));
-    } else {
-        // Si el DNI no existe en el padron, devolver un mensaje indicando que no se encontró
-        echo json_encode(array('success' => false, 'message' => 'Completar nombre y apellido'));
-    }
-}
-
-
 
 
 
@@ -508,19 +456,6 @@ function obtenerDiagnosticoConDescripcion()
         // Devolver un array vacío si no se encontraron diagnósticos
         return array();
     }
-}
-
-
-// Procesar la solicitud de buscar por nombre y apellido
-if (isset($_GET['buscarPorNombreApellido']) && isset($_GET['nombreYapellido'])) {
-    $nombreYapellido = $_GET['nombreYapellido'];
-    $datos = obtenerBeneficioPorNombreYApellido($nombreYapellido);
-    if ($datos) {
-        echo json_encode(array('success' => true, 'benef' => $datos['benef'],'dni' => $datos['dni'] ));
-    } else {
-        echo json_encode(array('success' => false, 'message' => 'Beneficio no encontrado'));
-    }
-    exit();
 }
 
 function obtenerBeneficioPorNombreYApellido($nombreYapellido)
