@@ -7,27 +7,38 @@ if (session_status() == PHP_SESSION_NONE) {
 }
 
 if (isset($_POST['agregar'])) {
-     // Verificar si el campo nombreYapellido está vacío
-     if (empty($_POST['nombreYapellido'])) {
+    // Verificar si el campo nombreYapellido está vacío
+    if (empty($_POST['nombreYapellido'])) {
         $_SESSION['alert_message'] = "El campo Nombre y Apellido no puede estar vacío";
         header("Location: ../pacientePanel/pacientePanel.php");
         exit(); // Asegura que el script se detenga después de la redirección
     }
     
     $nombreYapellido = $_POST['nombreYapellido'];
-    // Recibe los valores de 'Beneficio' y 'Parentesco' del formulario
     $beneficio = $_POST['benef'];
     $parentesco = $_POST['parent'];
     $cod_prof = $_POST['cod_prof'];
     $cod_practica = $_POST['cod_practica'];
     $fecha = $_POST['fecha'];
-    $cod_diag = $_POST['cod_diag']; // Obtener el código de diagnóstico del formulario
+    $cod_diag = $_POST['cod_diag'];// Obtener el código de diagnóstico del formulario 
+    // Concatenamos $beneficio y $parentesco en una sola cadena
+    $beneficio_concatenado = $beneficio . $parentesco;
 
-    // Llama a la función agregarPaciente con los argumentos necesarios, incluido y $cod_diag
-    if (agregarPaciente($nombreYapellido, $beneficio,$parentesco, $cod_prof, $cod_practica, $cod_diag, $fecha)) {
-        $_SESSION['alert_message'] = "Paciente agregado correctamente";
+    // Verificar si ya existe un registro con el mismo cod_prof, fecha (sin hora) y beneficio
+    $sql_check = "SELECT COUNT(*) AS count FROM paciente WHERE cod_prof = '$cod_prof' AND DATE(fecha) = DATE('$fecha') AND benef = '$beneficio_concatenado'";
+    $result = $conn->query($sql_check);
+    $row = $result->fetch_assoc();
+
+    if ($row['count'] > 0) {
+        // Lanzar alerta si ya existe un registro con el mismo cod_prof, fecha y beneficio
+        $_SESSION['alert_message'] = "El paciente ya se encuentra cargado con la fecha especificada y el beneficio.";
     } else {
-        $_SESSION['alert_message'] = "Error al agregar el paciente";
+        // Llama a la función agregarPaciente con los argumentos necesarios, incluido y $cod_diag
+        if (agregarPaciente($nombreYapellido, $beneficio, $parentesco, $cod_prof, $cod_practica, $cod_diag, $fecha)) {
+            $_SESSION['alert_message'] = "Paciente agregado correctamente";
+        } else {
+            $_SESSION['alert_message'] = "Error al agregar el paciente";
+        }
     }
 
     // Redirigir después de agregar para evitar reenvío de formulario
