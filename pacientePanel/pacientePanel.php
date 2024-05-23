@@ -213,6 +213,27 @@ if (!isset($_SESSION['usuario'])) {
         <script>
 
 
+            fetch('https://worldtimeapi.org/api/timezone/America/Argentina/Buenos_Aires')
+                .then(response => response.json())
+                .then(data => {
+                    // Crear un objeto Date a partir del datetime recibido
+                    const fecha = new Date(data.datetime);
+
+                    // Obtener los componentes individuales de la fecha y hora
+                    const year = fecha.getFullYear();
+                    const month = String(fecha.getMonth() + 1).padStart(2, '0'); // Los meses son 0-indexados
+                    const day = String(fecha.getDate()).padStart(2, '0');
+                    const hours = String(fecha.getHours()).padStart(2, '0');
+                    const minutes = String(fecha.getMinutes()).padStart(2, '0');
+
+                    // Formatear la fecha y hora en el formato requerido por el input datetime-local
+                    const formattedDate = `${year}-${month}-${day}T${hours}:${minutes}`;
+
+                    // Asignar el valor formateado al input
+                    document.getElementById('fecha').value = formattedDate;
+                })
+                .catch(error => console.error('Error:', error));
+
             document.getElementById('btnBuscar').addEventListener('click', function () {
                 // Obtener los valores de los campos de "Beneficio" y "Parentesco"
                 var beneficio = $('#benef').val();
