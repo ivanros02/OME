@@ -11,7 +11,7 @@ $fecha_hasta = isset ($_GET['fecha_hasta']) ? $_GET['fecha_hasta'] : '';
 $profesional = isset ($_GET['profesional']) ? $_GET['profesional'] : '';
 
 // Obtener pacientes con filtros
-$pacientes = obtenerPacientesConFiltro($fecha_desde, $fecha_hasta, $profesional);
+$pacientes = obtenerPacientesConFiltroParaPDF($fecha_desde, $fecha_hasta, $profesional);
 
 // Crear un nuevo documento PDF
 $pdf = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);

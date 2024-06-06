@@ -6,12 +6,12 @@ require_once('../tcpdf/tcpdf.php');
 require_once '../controlador/control_paciente.php';
 
 // Obtener los parámetros de filtro de la URL
-$fecha_desde = isset ($_GET['fecha_desde']) ? $_GET['fecha_desde'] : '';
-$fecha_hasta = isset ($_GET['fecha_hasta']) ? $_GET['fecha_hasta'] : '';
-$profesional = isset ($_GET['profesional']) ? $_GET['profesional'] : '';
+$fecha_desde = isset($_GET['fecha_desde']) ? $_GET['fecha_desde'] : '';
+$fecha_hasta = isset($_GET['fecha_hasta']) ? $_GET['fecha_hasta'] : '';
+$profesional = isset($_GET['profesional']) ? $_GET['profesional'] : '';
 
 // Obtener pacientes con filtros
-$pacientes = obtenerPacientesConFiltro($fecha_desde, $fecha_hasta, $profesional);
+$pacientes = obtenerPacientesConFiltroParaPDF($fecha_desde, $fecha_hasta, $profesional);
 
 // Crear un nuevo documento PDF
 $pdf = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
@@ -23,10 +23,10 @@ $pdf->AddPage();
 $nombreProfesional = obtenerNombreProfesional($profesional);
 
 // Definir el contenido del PDF
-$content = '<h1>Reporte de Pacientes del Profesional:' . $nombreProfesional .'</h1>';
+$content = '<h1>Reporte de Pacientes del Profesional:' . $nombreProfesional . '</h1>';
 
 // Obtener y mostrar el total de pacientes para el profesional específico
-$totalPacientesProfesional = obtenerTotalPacientesParaProfesional($profesional);
+$totalPacientesProfesional = obtenerTotalPacientesParaProfesional($profesional, $fecha_desde, $fecha_hasta);
 $content .= '<p>Total de Pacientes: ' . $totalPacientesProfesional . '</p>';
 
 // Verificar si hay pacientes para mostrar
@@ -43,10 +43,10 @@ if (!empty($pacientes)) {
     // Iterar sobre los pacientes y agregarlos a la tabla
     foreach ($pacientes as $paciente) {
         $content .= '<tr>
-                        <td>'.$paciente["nombreYapellido"].'</td>
-                        <td>'.$paciente["benef"].'</td>
-                        <td>'.$paciente["cod_practica"].'</td>
-                        <td>'.date('d/m/Y H:i:s', strtotime($paciente["fecha"])).'</td>
+                        <td>' . $paciente["nombreYapellido"] . '</td>
+                        <td>' . $paciente["benef"] . '</td>
+                        <td>' . $paciente["cod_practica"] . '</td>
+                        <td>' . date('d/m/Y H:i:s', strtotime($paciente["fecha"])) . '</td>
                     </tr>';
     }
 

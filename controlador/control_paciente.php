@@ -55,12 +55,12 @@ function obtenerPacientesConFiltro($fecha_desde, $fecha_hasta, $profesional) {
 
     // Aplicar filtro por fecha desde
     if (!empty($fecha_desde)) {
-        $sql .= " AND fecha >= '$fecha_desde'";
+        $sql .= " AND DATE(fecha) >= '$fecha_desde'";
     }
 
     // Aplicar filtro por fecha hasta
     if (!empty($fecha_hasta)) {
-        $sql .= " AND fecha <= '$fecha_hasta'";
+        $sql .= " AND DATE(fecha) <= '$fecha_hasta'";
     }
 
     // Aplicar filtro por profesional
@@ -92,18 +92,79 @@ function obtenerPacientesConFiltro($fecha_desde, $fecha_hasta, $profesional) {
     }
 }
 
-function obtenerTotalPacientesParaProfesional($profesional)
-{
+function obtenerPacientesConFiltroParaPDF($fecha_desde, $fecha_hasta, $profesional) {
     global $conn;
 
-    // Preparar la consulta SQL para obtener el total de pacientes para un profesional específico
+    // Preparar la consulta SQL base para obtener pacientes
+    $sql = "SELECT * FROM paciente WHERE 1";
+
+    // Aplicar filtro por fecha desde
+    if (!empty($fecha_desde)) {
+        $sql .= " AND DATE(fecha) >= '$fecha_desde'";
+    }
+
+    // Aplicar filtro por fecha hasta
+    if (!empty($fecha_hasta)) {
+        $sql .= " AND DATE(fecha) <= '$fecha_hasta'";
+    }
+
+    // Aplicar filtro por profesional
+    if (!empty($profesional)) {
+        $sql .= " AND cod_prof = $profesional";
+    }
+
+    // Añadir orden por fecha
+    $sql .= " ORDER BY fecha ASC";
+
+    // Ejecutar la consulta
+    $result = $conn->query($sql);
+
+    // Verificar si se encontraron pacientes
+    if ($result->num_rows > 0) {
+        // Inicializar array para almacenar pacientes
+        $pacientes = array();
+
+        // Iterar sobre los resultados y almacenarlos en el array
+        while ($row = $result->fetch_assoc()) {
+            $pacientes[] = $row;
+        }
+
+        // Devolver array de pacientes
+        return $pacientes;
+    } else {
+        // Devolver un array vacío si no se encontraron pacientes
+        return array();
+    }
+}
+
+
+function obtenerTotalPacientesParaProfesional($profesional, $fecha_desde, $fecha_hasta) {
+    global $conn;
+
+    // Preparar la consulta SQL para obtener el total de pacientes para un profesional específico dentro del rango de fechas
     $sql = "SELECT COUNT(*) AS total FROM paciente WHERE cod_prof = ?";
+
+    // Agregar condiciones para el rango de fechas si están proporcionadas
+    if (!empty($fecha_desde)) {
+        $sql .= " AND DATE(fecha) >= ?";
+    }
+    if (!empty($fecha_hasta)) {
+        $sql .= " AND DATE(fecha) <= ?";
+    }
 
     // Preparar la sentencia
     $stmt = $conn->prepare($sql);
 
-    // Vincular el parámetro
-    $stmt->bind_param("i", $profesional);
+    // Vincular los parámetros
+    if (!empty($fecha_desde) && !empty($fecha_hasta)) {
+        $stmt->bind_param("iss", $profesional, $fecha_desde, $fecha_hasta);
+    } elseif (!empty($fecha_desde)) {
+        $stmt->bind_param("is", $profesional, $fecha_desde);
+    } elseif (!empty($fecha_hasta)) {
+        $stmt->bind_param("is", $profesional, $fecha_hasta);
+    } else {
+        $stmt->bind_param("i", $profesional);
+    }
 
     // Ejecutar la consulta
     $stmt->execute();
@@ -121,6 +182,7 @@ function obtenerTotalPacientesParaProfesional($profesional)
         return 0;
     }
 }
+
 
 function obtenerTotalPacientes()
 {
