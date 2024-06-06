@@ -191,9 +191,6 @@ if (!isset($_SESSION['usuario'])) {
         <br>
         <div class="flex items-center mb-4">
             <h2 class="text-3xl font-bold mr-4">Reporte de prestaciones</h2>
-            <button id="btnGenerarPDF" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded">
-                Generar PDF
-            </button>
         </div>
 
         <div class="mb-4">
@@ -207,6 +204,10 @@ if (!isset($_SESSION['usuario'])) {
             <input type="date" id="fecha_hasta" name="fecha_hasta"
                 class="mt-1 p-2 block w-full border border-gray-300 rounded-md focus:outline-none focus:border-blue-500">
         </div>
+
+        <button id="btnGenerarPDF" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded">
+                Generar PDF
+            </button>
         
         <div id="contenedorPacientes"></div>
         <!-- Aquí va el script de JavaScript -->
