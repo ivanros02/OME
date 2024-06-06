@@ -8,7 +8,6 @@ if (!isset($_SESSION['usuario'])) {
     exit; // Asegura que el script se detenga después de redirigir
 }
 
-
 ?>
 
 <!DOCTYPE html>
@@ -20,7 +19,12 @@ if (!isset($_SESSION['usuario'])) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Panel de Prestaciones</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="icon" href="../img/logo.png" type="image/x-icon">
+    <link rel="shortcut icon" href="../img/logo.png" type="image/x-icon">
     <!-- Agregar el archivo CSS de Tailwind CSS -->
+    <script src="assets/plugins/qrCode.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    
     <style>
         .image-top-right {
             position: absolute;
@@ -75,13 +79,12 @@ if (!isset($_SESSION['usuario'])) {
         <img src="../img/prestaciones.jpeg" alt="Imagen" class="image-top-right hidden sm:block">
         <h1 class="text-3xl font-bold mb-4">Panel de Prestaciones</h1>
 
-        <p class="text-lg text-gray-600">
+         <p class="text-lg text-gray-600">
             <br>
             <strong>Actualización</strong>: Los números de beneficios de los pacientes son verificados contra
             el padrón online, en el caso que estén incorrectos no se podrá registrar la prestación. <br>
             <strong>Recuerde</strong> tener en cuenta el 'Código de Práctica' de cada especialidad.
         </p>
-
 
         <!-- Formulario para agregar nuevo paciente -->
         <h2 class="text-2xl font-bold mb-2">Agregar Nueva Prestacion</h2>
@@ -111,17 +114,18 @@ if (!isset($_SESSION['usuario'])) {
                 </select>
             </div>
 
+            
 
             <div id="buscarContainer">
                 <div class="mb-4 flex items-center">
-                    <label for="benef" class="block text-sm font-medium text-gray-700 mr-2">Beneficio:</label>
-                    <input type="text" id="benef" name="benef" required maxlength="12"
+                    <label for="benef" class="block text-sm font-medium text-gray-700 mr-2">Beneficio(12 digitos):</label>
+                    <input type="number" id="benef" name="benef" required maxlength="12"
                         class="mt-1 p-2 block w-1/2 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500 mr-2">
                 </div>
 
                 <div class="mb-4 flex items-center">
-                    <label for="parentesco" class="block text-sm font-medium text-gray-700 mr-2">Parentesco:</label>
-                    <input type="text" id="parentesco" name="parent" required maxlength="2"
+                    <label for="parentesco" class="block text-sm font-medium text-gray-700 mr-2">Parentesco(2 digitos):</label>
+                    <input type="number" id="parentesco" name="parent" required maxlength="2"
                         class="mt-1 p-2 block w-1/2 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500 mr-2">
                 </div>
 
@@ -178,11 +182,12 @@ if (!isset($_SESSION['usuario'])) {
 
 
             <button type="submit" name="agregar" id="btnAgregar"
-                class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded">
+                class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded" >
                 Agregar
             </button>
 
         </form>
+        
         <br>
         <div class="flex items-center mb-4">
             <h2 class="text-3xl font-bold mr-4">Reporte de prestaciones</h2>
@@ -202,18 +207,15 @@ if (!isset($_SESSION['usuario'])) {
             <input type="date" id="fecha_hasta" name="fecha_hasta"
                 class="mt-1 p-2 block w-full border border-gray-300 rounded-md focus:outline-none focus:border-blue-500">
         </div>
-
-
-
+        
         <div id="contenedorPacientes"></div>
         <!-- Aquí va el script de JavaScript -->
         <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/cheerio"></script>
         <script>
-
-
-            fetch('https://worldtimeapi.org/api/timezone/America/Argentina/Buenos_Aires')
+            
+             fetch('https://worldtimeapi.org/api/timezone/America/Argentina/Buenos_Aires')
                 .then(response => response.json())
                 .then(data => {
                     // Crear un objeto Date a partir del datetime recibido
@@ -233,7 +235,9 @@ if (!isset($_SESSION['usuario'])) {
                     document.getElementById('fecha').value = formattedDate;
                 })
                 .catch(error => console.error('Error:', error));
-
+        
+            
+            
             document.getElementById('btnBuscar').addEventListener('click', function () {
                 // Obtener los valores de los campos de "Beneficio" y "Parentesco"
                 var beneficio = $('#benef').val();
@@ -257,11 +261,11 @@ if (!isset($_SESSION['usuario'])) {
                             alert("No se encontró ningún beneficiario con los datos proporcionados.");
                         }
                     })
-                    .catch(error => {
-                        console.error(error);
-                        // Muestra un mensaje de error si ocurre un error durante la solicitud
-                        alert("Error al buscar el nombre y apellido.");
-                    });
+                    .catch (error => {
+                            console.error(error);
+                            // Muestra un mensaje de error si ocurre un error durante la solicitud
+                            alert("Error al buscar el nombre y apellido.");
+                        });
             });
 
 
@@ -377,7 +381,7 @@ if (!isset($_SESSION['usuario'])) {
                                 var fechaFormateada = dia + '/' + mes + '/' + año + ' ' + hora + ':' + minutos + ':' + segundos;
 
                                 // Agregar los datos del paciente a la fila de la tabla
-                                row.innerHTML = '<td>' + paciente.nombreYapellido + '</td><td>' + paciente.benef + '</td><td>' + data.nombreProfesional + '</td><td>' + paciente.cod_practica + '</td><td>' + paciente.cod_diag + '</td><td>' + fechaFormateada; // + '</td><td><button onclick="editarPaciente(' + paciente.cod_paci + ')">Editar</button></td>'
+                                row.innerHTML = '<td>' + paciente.nombreYapellido + '</td><td>' + paciente.benef + '</td><td>' + data.nombreProfesional + '</td><td>' + paciente.cod_practica + '</td><td>' + paciente.cod_diag + '</td><td>' + fechaFormateada ; // + '</td><td><button onclick="editarPaciente(' + paciente.cod_paci + ')">Editar</button></td>'
                             } else {
                                 console.error('Error al obtener el nombre del profesional:', data.message);
                                 // Si hay un error, mostrar solo los detalles del paciente sin el nombre del profesional
@@ -401,6 +405,7 @@ if (!isset($_SESSION['usuario'])) {
 
 
 
+
             // Agrega un event listener para detectar cambios en el elemento select con id cod_prof
             document.getElementById('cod_prof').addEventListener('change', function () {
                 var cod_prof = this.value; // Obtener el valor seleccionado del profesional
@@ -410,7 +415,6 @@ if (!isset($_SESSION['usuario'])) {
 
 
         </script>
-
 </body>
 
 </html>

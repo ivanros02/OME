@@ -1,12 +1,12 @@
 <?php
 require_once '../conexion/conexion.php';
 
-function agregarPaciente($nombreYapellido, $benef,$parent, $cod_prof, $cod_practica, $cod_diag, $fecha)
+function agregarPaciente($nombreYapellido, $benef,$parent, $cod_prof, $cod_practica, $cod_diag)
 {
     global $conn;
 
     // Realizar la inserción del paciente en la tabla paciente
-    $sql_insert_paciente = "INSERT INTO paciente (nombreYapellido, benef, cod_prof, cod_practica, fecha ,cod_diag) VALUES ('$nombreYapellido', CONCAT('$benef', '$parent'), '$cod_prof', '$cod_practica', '$fecha' , '$cod_diag')";
+    $sql_insert_paciente = "INSERT INTO paciente (nombreYapellido, benef, cod_prof, cod_practica,cod_diag) VALUES ('$nombreYapellido', CONCAT('$benef', '$parent'), '$cod_prof', '$cod_practica', '$cod_diag')";
     
     return $conn->query($sql_insert_paciente);
 }
@@ -22,7 +22,7 @@ function editarPaciente($cod_paci, $nombreYapellido, $benef, $cod_prof, $cod_pra
     $row_check_beneficio = $result_check_beneficio->fetch_assoc();
     $beneficio_existente = $row_check_beneficio['count'] > 0;
 
-    // Si el beneficio existe, realizar la actualización del paciente
+    // Si el beneficio existe, realizar la actualizaci車n del paciente
     if ($beneficio_existente) {
         $sql_update_paciente = "UPDATE paciente SET nombreYapellido='$nombreYapellido', benef='$benef', cod_prof='$cod_prof', cod_practica='$cod_practica', fecha='$fecha', cod_diag='$cod_diag' WHERE cod_paci=$cod_paci";
         return $conn->query($sql_update_paciente);
@@ -32,7 +32,7 @@ function editarPaciente($cod_paci, $nombreYapellido, $benef, $cod_prof, $cod_pra
         $result_insert_padron = $conn->query($sql_insert_padron);
 
         if ($result_insert_padron) {
-            // Después de insertar en padron, actualizar el paciente
+            // Despu谷s de insertar en padron, actualizar el paciente
             $sql_update_paciente = "UPDATE paciente SET nombreYapellido='$nombreYapellido', benef='$benef', cod_prof='$cod_prof', cod_practica='$cod_practica', fecha='$fecha', cod_diag='$cod_diag' WHERE cod_paci=$cod_paci";
             return $conn->query($sql_update_paciente);
         } else {

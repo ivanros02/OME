@@ -34,7 +34,7 @@ if (isset($_POST['agregar'])) {
         $_SESSION['alert_message'] = "El paciente ya se encuentra cargado con la fecha especificada y el beneficio.";
     } else {
         // Llama a la función agregarPaciente con los argumentos necesarios, incluido y $cod_diag
-        if (agregarPaciente($nombreYapellido, $beneficio, $parentesco, $cod_prof, $cod_practica, $cod_diag, $fecha)) {
+        if (agregarPaciente($nombreYapellido, $beneficio, $parentesco, $cod_prof, $cod_practica, $cod_diag)) {
             $_SESSION['alert_message'] = "Paciente agregado correctamente";
         } else {
             $_SESSION['alert_message'] = "Error al agregar el paciente";
@@ -47,9 +47,7 @@ if (isset($_POST['agregar'])) {
 }
 
 
-// Función para obtener pacientes con filtros aplicados
-function obtenerPacientesConFiltro($fecha_desde, $fecha_hasta, $profesional)
-{
+function obtenerPacientesConFiltro($fecha_desde, $fecha_hasta, $profesional) {
     global $conn;
 
     // Preparar la consulta SQL base para obtener pacientes
@@ -71,7 +69,7 @@ function obtenerPacientesConFiltro($fecha_desde, $fecha_hasta, $profesional)
     }
 
     // Ordenar por estado de carga y luego por cod_prof
-    $sql .= " ORDER BY cargado DESC, cod_prof ASC";
+    $sql .= " ORDER BY cargado ASC, cod_prof ASC";
 
     // Ejecutar la consulta
     $result = $conn->query($sql);
@@ -93,8 +91,6 @@ function obtenerPacientesConFiltro($fecha_desde, $fecha_hasta, $profesional)
         return array();
     }
 }
-
-
 
 function obtenerTotalPacientesParaProfesional($profesional)
 {
@@ -143,6 +139,54 @@ function obtenerTotalPacientes()
     return $row['total'];
 }
 
+function obtenerNombreYApellidoPorDNI($dni)
+{
+    global $conn;
+
+    // Preparar la consulta SQL
+    $sql = "SELECT nombreYapellido, benef FROM padron WHERE dni = ?";
+
+    // Preparar la sentencia
+    $stmt = $conn->prepare($sql);
+
+    // Vincular el parámetro
+    $stmt->bind_param("i", $dni);
+
+    // Ejecutar la consulta
+    $stmt->execute();
+
+    // Obtener el resultado
+    $result = $stmt->get_result();
+
+    // Verificar si se encontró el nombre y apellido
+    if ($result->num_rows > 0) {
+        // Devolver el nombre, apellido y beneficio
+        $row = $result->fetch_assoc();
+        return array(
+            'nombreYapellido' => $row['nombreYapellido'],
+            'benef' => $row['benef']
+        );
+    } else {
+        // Devolver false si no se encontró el nombre y apellido
+        return false;
+    }
+}
+
+if (isset($_GET['verificarDni']) && isset($_GET['dni'])) {
+    $dni = $_GET['dni'];
+
+    // Obtener nombre, apellido y beneficio por DNI
+    $datos = obtenerNombreYApellidoPorDNI($dni);
+
+    if ($datos) {
+        echo json_encode(array('success' => true, 'nombreYapellido' => $datos['nombreYapellido'], 'benef' => $datos['benef']));
+    } else {
+        // Si el DNI no existe en el padron, devolver un mensaje indicando que no se encontró
+        echo json_encode(array('success' => false, 'message' => 'Completar nombre y apellido'));
+    }
+}
+
+
 
 
 function obtenerNombreYApellidoPorBeneficio($beneficio)
@@ -178,39 +222,21 @@ function obtenerNombreYApellidoPorBeneficio($beneficio)
     }
 }
 
-
-function obtenerNombreYApellidoPorDNI($dni)
-{
-    global $conn;
-
-    // Preparar la consulta SQL
-    $sql = "SELECT nombreYapellido, benef FROM padron WHERE dni = ?";
-
-    // Preparar la sentencia
-    $stmt = $conn->prepare($sql);
-
-    // Vincular el parámetro
-    $stmt->bind_param("i", $dni);
-
-    // Ejecutar la consulta
-    $stmt->execute();
-
-    // Obtener el resultado
-    $result = $stmt->get_result();
-
-    // Verificar si se encontró el nombre y apellido
-    if ($result->num_rows > 0) {
-        // Devolver el nombre, apellido y beneficio
-        $row = $result->fetch_assoc();
-        return array(
-            'nombreYapellido' => $row['nombreYapellido'],
-            'benef' => $row['benef']
-        );
+// Procesar la solicitud de verificación del número de beneficio
+if (isset($_GET['verificarBeneficio']) && isset($_GET['benef'])) {
+    $beneficio = $_GET['benef'];
+    $datos = obtenerNombreYApellidoPorBeneficio($beneficio);
+    $completar = 'Completar con nombre y apellido';
+    if ($datos) {
+        echo json_encode(array('success' => true, 'nombreYapellido' => $datos['nombreYapellido'], 'dni' => $datos['dni']));
     } else {
-        // Devolver false si no se encontró el nombre y apellido
-        return false;
+        // Si no se reciben los parámetros esperados, devolver un mensaje de error
+        echo json_encode(array('success' => false, 'message' => 'Completar nombre y apellido'));
+
     }
+    exit();
 }
+
 
 
 
@@ -275,8 +301,7 @@ function actualizarEstadoCargado($cod_paci, $nuevo_estado)
 
 
 // Función para obtener los pacientes de un profesional específico
-function obtenerPacientesPorProfesional($cod_prof)
-{
+function obtenerPacientesPorProfesional($cod_prof) {
     global $conn;
 
     // Preparar la consulta SQL para obtener los pacientes del profesional
@@ -360,7 +385,7 @@ function obtenerEspecialidadProfesional($cod_prof)
     }
 }
 
-function obtenerDescripcionPractica($cod_practica)
+function obtenerDescripcionPractica($cod_practica )
 {
     global $conn;
     $sql = "SELECT descript FROM tipo_prac WHERE cod_practica  = ?";
@@ -368,7 +393,7 @@ function obtenerDescripcionPractica($cod_practica)
     // Preparar la sentencia
     $stmt = $conn->prepare($sql);
     // Vincular parámetro
-    $stmt->bind_param("i", $cod_practica);
+    $stmt->bind_param("i", $cod_practica );
     // Ejecutar consulta
     $stmt->execute();
     // Obtener resultado
@@ -469,6 +494,18 @@ function obtenerDiagnosticoConDescripcion()
     }
 }
 
+// Procesar la solicitud de buscar por nombre y apellido
+if (isset($_GET['buscarPorNombreApellido']) && isset($_GET['nombreYapellido'])) {
+    $nombreYapellido = $_GET['nombreYapellido'];
+    $datos = obtenerBeneficioPorNombreYApellido($nombreYapellido);
+    if ($datos) {
+        echo json_encode(array('success' => true, 'benef' => $datos['benef'],'dni' => $datos['dni'] ));
+    } else {
+        echo json_encode(array('success' => false, 'message' => 'Beneficio no encontrado'));
+    }
+    exit();
+}
+
 function obtenerBeneficioPorNombreYApellido($nombreYapellido)
 {
     global $conn;
@@ -501,6 +538,5 @@ function obtenerBeneficioPorNombreYApellido($nombreYapellido)
         return false;
     }
 }
-
 
 ?>
